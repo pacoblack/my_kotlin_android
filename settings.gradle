@@ -1,0 +1,4 @@
+include ':app'
+include ':cmakelibrary'
+include ':videolibrary'
+include ':proxylibrary'
