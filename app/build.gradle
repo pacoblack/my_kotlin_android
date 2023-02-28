@@ -54,7 +54,7 @@ dependencies {
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
-    implementation "com.squareup.okhttp3:okhttp:4.7.2"
+    implementation "com.squareup.okhttp3:okhttp:4.9.2"
 
     implementation 'io.github.meituan-dianping:router:1.2.1'
 
