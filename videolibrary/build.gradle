@@ -44,6 +44,5 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.1'
     implementation 'com.google.android.exoplayer:extension-ima:2.18.1'
     implementation project(':proxylibrary')
-
-    implementation 'com.squareup.okhttp3:okhttp:4.9.2'
+    implementation project(':network')
 }
