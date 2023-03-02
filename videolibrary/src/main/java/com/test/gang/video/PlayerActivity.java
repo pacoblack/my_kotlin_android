@@ -27,7 +27,7 @@ import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.drm.DefaultDrmSessionManagerProvider;
 import com.google.android.exoplayer2.drm.FrameworkMediaDrm;
-import com.google.android.exoplayer2.ext.ima.ImaAdsLoader;
+//import com.google.android.exoplayer2.ext.ima.ImaAdsLoader;
 import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer;
 import com.google.android.exoplayer2.mediacodec.MediaCodecUtil;
 import com.google.android.exoplayer2.offline.DownloadRequest;
@@ -295,9 +295,9 @@ public class PlayerActivity extends AppCompatActivity
                                 .setUpstreamDataSourceFactory(DemoUtil.getHttpDataSourceFactory(this)));
         return new DefaultMediaSourceFactory(factory)
                 .setDataSourceFactory(dataSourceFactory)
-                .setDrmSessionManagerProvider(drmSessionManagerProvider)
-                .setLocalAdInsertionComponents(
-                        this::getClientSideAdsLoader, /* adViewProvider= */ playerView);
+                .setDrmSessionManagerProvider(drmSessionManagerProvider);
+//                .setLocalAdInsertionComponents(
+//                        this::getClientSideAdsLoader, /* adViewProvider= */ playerView);
     }
 
     private void setRenderersFactory(
@@ -491,14 +491,14 @@ public class PlayerActivity extends AppCompatActivity
         return mediaItems;
     }
 
-    private AdsLoader getClientSideAdsLoader(MediaItem.AdsConfiguration adsConfiguration) {
-        // The ads loader is reused for multiple playbacks, so that ad playback can resume.
-        if (clientSideAdsLoader == null) {
-            clientSideAdsLoader = new ImaAdsLoader.Builder(/* context= */ this).build();
-        }
-        clientSideAdsLoader.setPlayer(player);
-        return clientSideAdsLoader;
-    }
+//    private AdsLoader getClientSideAdsLoader(MediaItem.AdsConfiguration adsConfiguration) {
+//        // The ads loader is reused for multiple playbacks, so that ad playback can resume.
+//        if (clientSideAdsLoader == null) {
+//            clientSideAdsLoader = new ImaAdsLoader.Builder(/* context= */ this).build();
+//        }
+//        clientSideAdsLoader.setPlayer(player);
+//        return clientSideAdsLoader;
+//    }
 
     private void releaseClientSideAdsLoader() {
         if (clientSideAdsLoader != null) {
