@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources tools:ignore="ExtraTranslation" xmlns:tools="http://schemas.android.com/tools">
+    <string name="video_orientation_video">video orientation</string>
+    <string name="video_orientation_system">device orientation</string>
+</resources>
