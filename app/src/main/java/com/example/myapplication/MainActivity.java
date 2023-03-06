@@ -16,7 +16,7 @@ import com.test.gang.video.DemoDownloadService;
 import com.test.gang.video.DemoUtil;
 import com.test.gang.video.DownloadTracker;
 import com.test.gang.video.IntentUtil;
-import com.test.gang.video.PlayerActivity;
+import com.test.gang.video.ExoPlayerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements DownloadTracker.L
                 List<MediaItem> mediaItems = new ArrayList<>(2);
                 MediaItem item = new MediaItem.Builder().setUri("http://www.nenu.edu.cn/_upload/article/videos/03/5f/7c999eed42e3aadc413d7f851f0e/0f50b3eb-9285-41d2-ac4d-6cc363651aad_B.mp4").build();
                 mediaItems.add(item);
-                Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
+                Intent intent = new Intent(MainActivity.this, ExoPlayerActivity.class);
                 intent.putExtra(
                         IntentUtil.PREFER_EXTENSION_DECODERS_EXTRA,
                         true);

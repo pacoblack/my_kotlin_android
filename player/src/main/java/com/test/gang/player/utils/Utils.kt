@@ -5,6 +5,7 @@ import android.view.Display
 import android.view.Window
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.test.gang.player.PlayerActivity
 import java.util.*
 
 class Utils {
@@ -45,11 +46,11 @@ class Utils {
                                 mode.physicalHeight == activeMode.physicalHeight
                             ) {
                                 modesResolutionCount++
-                                if (Utils.normRate(mode.refreshRate) >= Utils.normRate(
+                                if (normRate(mode.refreshRate) >= normRate(
                                         frameRate
                                     )
                                 ) modesHigh.add(mode)
-                                if (Utils.normRate(mode.refreshRate) > Utils.normRate(
+                                if (normRate(mode.refreshRate) > normRate(
                                         modeTop.refreshRate
                                     )
                                 ) modeTop = mode
@@ -60,11 +61,11 @@ class Utils {
                             var modes = "Available refreshRates:"
                             for (mode in modesHigh) {
                                 modes += " " + mode.refreshRate
-                                if (Utils.normRate(mode.refreshRate) % Utils.normRate(
+                                if (normRate(mode.refreshRate) % normRate(
                                         frameRate
                                     ) <= 0.0001f
                                 ) {
-                                    if (modeBest == null || Utils.normRate(mode.refreshRate) > Utils.normRate(
+                                    if (modeBest == null || normRate(mode.refreshRate) > normRate(
                                             modeBest.refreshRate
                                         )
                                     ) {
@@ -75,9 +76,9 @@ class Utils {
                             val window: Window = activity.getWindow()
                             val layoutParams = window.attributes
                             if (modeBest == null) modeBest = modeTop
-                            switchingModes = modeBest.getModeId() != activeMode.modeId
+                            switchingModes = modeBest!!.getModeId() != activeMode.modeId
                             if (switchingModes) {
-                                layoutParams.preferredDisplayModeId = modeBest.getModeId()
+                                layoutParams.preferredDisplayModeId = modeBest!!.getModeId()
                                 window.attributes = layoutParams
                             }
                             if (BuildConfig.DEBUG) Toast.makeText(
@@ -98,7 +99,7 @@ class Utils {
             }
         }
 
-        fun normRate(rate: Float): Int {
+        private fun normRate(rate: Float): Int {
             return (rate * 100f).toInt()
         }
     }

@@ -3,7 +3,6 @@ package com.test.gang.video;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Pair;
@@ -47,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PlayerActivity extends AppCompatActivity
+public class ExoPlayerActivity extends AppCompatActivity
         implements View.OnClickListener, StyledPlayerView.ControllerVisibilityListener {
 
     // Saved instance state keys.
@@ -221,7 +220,7 @@ public class PlayerActivity extends AppCompatActivity
     // Internal methods
 
     protected void setContentView() {
-        setContentView(R.layout.player_activity);
+        setContentView(R.layout.exo_player_activity);
     }
 
     /**

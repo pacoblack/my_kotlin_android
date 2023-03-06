@@ -7,34 +7,39 @@ import android.os.Build
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFprobeKit
 import com.arthenica.ffmpegkit.MediaInformation
+import com.google.android.exoplayer2.ui.PlayerControlView
+import com.test.gang.player.PlayerActivity
 
 class FfmpegKitUtils {
     private fun getMediaInformation(activity: Activity, uri: Uri): MediaInformation? {
-        val path: String
-        path = if (ContentResolver.SCHEME_CONTENT == uri.scheme) {
-            try {
-                FFmpegKitConfig.getSafParameterForRead(activity, uri)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return null
+        val path: String = when {
+            ContentResolver.SCHEME_CONTENT == uri.scheme -> {
+                try {
+                    FFmpegKitConfig.getSafParameterForRead(activity, uri)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    return null
+                }
             }
-        } else if (ContentResolver.SCHEME_FILE == uri.scheme) {
-            // TODO: FFprobeKit doesn't accept encoded uri (like %20) (?!)
-            uri.schemeSpecificPart
-        } else {
-            uri.toString()
+            ContentResolver.SCHEME_FILE == uri.scheme -> {
+                // TODO: FFprobeKit doesn't accept encoded uri (like %20) (?!)
+                uri.schemeSpecificPart
+            }
+            else -> {
+                uri.toString()
+            }
         }
         val mediaInformationSession = FFprobeKit.getMediaInformation(path)
         return mediaInformationSession.mediaInformation
     }
 
-    fun markChapters(activity: PlayerActivity, uri: Uri?, controlView: PlayerControlView) {
+    fun markChapters(activity: PlayerActivity, uri: Uri, controlView: PlayerControlView) {
         if (activity.chaptersThread != null) {
-            activity.chaptersThread.interrupt()
+            activity.chaptersThread!!.interrupt()
         }
-        activity.chaptersThread = Thread(label@ Runnable {
+        activity.chaptersThread = Thread( Runnable {
             val mediaInformation: MediaInformation =
-                getMediaInformation(activity, uri) ?: return@label
+                getMediaInformation(activity, uri) ?: return@Runnable
             val chapters = mediaInformation.chapters
             val starts = LongArray(chapters.size)
             val played = BooleanArray(chapters.size)
@@ -51,26 +56,26 @@ class FfmpegKitUtils {
             activity.chapterStarts = starts
             activity.runOnUiThread { controlView.setExtraAdGroupMarkers(starts, played) }
         })
-        activity.chaptersThread.start()
+        activity.chaptersThread!!.start()
     }
 
-    fun switchFrameRate(activity: PlayerActivity, uri: Uri?, play: Boolean): Boolean {
+    fun switchFrameRate(activity: PlayerActivity, uri: Uri, play: Boolean): Boolean {
         // preferredDisplayModeId only available on SDK 23+
         // ExoPlayer already uses Surface.setFrameRate() on Android 11+
         return if (Build.VERSION.SDK_INT >= 23) {
             if (activity.frameRateSwitchThread != null) {
-                activity.frameRateSwitchThread.interrupt()
+                activity.frameRateSwitchThread!!.interrupt()
             }
-            activity.frameRateSwitchThread = Thread(label@ Runnable {
+            activity.frameRateSwitchThread = Thread(Runnable {
 
                 // Use ffprobe as ExoPlayer doesn't detect video frame rate for lots of videos
                 // and has different precision than ffprobe (so do not mix that)
-                var frameRate: Float = Format.NO_VALUE
-                val mediaInformation: MediaInformation =
+                var frameRate: Float = -1f
+                val mediaInformation: MediaInformation? =
                     getMediaInformation(activity, uri)
                 if (mediaInformation == null) {
                     activity.runOnUiThread { Utils.playIfCan(activity, play) }
-                    return@label
+                    return@Runnable
                 }
                 val streamInformations =
                     mediaInformation.streams
@@ -87,7 +92,7 @@ class FfmpegKitUtils {
                 }
                 Utils.handleFrameRate(activity, frameRate, play)
             })
-            activity.frameRateSwitchThread.start()
+            activity.frameRateSwitchThread!!.start()
             true
         } else {
             false
