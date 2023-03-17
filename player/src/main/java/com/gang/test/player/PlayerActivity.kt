@@ -94,7 +94,8 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
-@UnstableApi class PlayerActivity : Activity() {
+@UnstableApi
+open class PlayerActivity : Activity() {
     private var playerListener: PlayerListener? = null
     private var mReceiver: BroadcastReceiver? = null
     private var mAudioManager: AudioManager? = null
@@ -112,7 +113,7 @@ import kotlin.math.abs
     private var scaleFactor = 1.0f
     private var coordinatorLayout: CoordinatorLayout? = null
     private var titleView: TextView? = null
-    private var buttonOpen: ImageButton? = null
+
     private var buttonPiP: ImageButton? = null
     private var buttonAspectRatio: ImageButton? = null
     private var buttonRotation: ImageButton? = null
@@ -258,28 +259,8 @@ import kotlin.math.abs
         playerView?.let {
             initPlayerView(it)
         }
-        initOpenButton()
     }
 
-    private fun initOpenButton(){
-        buttonOpen = ImageButton(this, null, 0, R.style.ExoStyledControls_Button_Bottom)
-        buttonOpen!!.setImageResource(R.drawable.ic_folder_open_24dp)
-        buttonOpen!!.id = View.generateViewId()
-        buttonOpen!!.contentDescription = getString(R.string.button_open)
-        buttonOpen!!.setOnClickListener {
-            openFile(
-                mPrefs!!.mediaUri
-            )
-        }
-        buttonOpen!!.setOnLongClickListener {
-            if (!isTvBox && mPrefs!!.askScope) {
-                askForScope(true, false)
-            } else {
-                loadSubtitleFile(mPrefs!!.mediaUri)
-            }
-            true
-        }
-    }
 
     private fun initPlayerView(playerView:PlayerView){
         playerView.setShowNextButton(false)
@@ -564,7 +545,7 @@ import kotlin.math.abs
         val horizontalScrollView =
             layoutInflater.inflate(R.layout.controls, null) as HorizontalScrollView
         val controls = horizontalScrollView.findViewById<LinearLayout>(R.id.controls)
-        controls.addView(buttonOpen)
+        addViewInControls(controls)
         controls.addView(exoSubtitle)
         controls.addView(buttonAspectRatio)
         if (isPiPSupported(this) && buttonPiP != null) {
@@ -601,24 +582,7 @@ import kotlin.math.abs
             }
             if (controllerVisible && playerView.isControllerFullyVisible()) {
                 if (mPrefs!!.firstRun) {
-                    TapTargetView.showFor(this@PlayerActivity,
-                        TapTarget.forView(
-                            buttonOpen, getString(R.string.onboarding_open_title), getString(
-                                R.string.onboarding_open_description
-                            )
-                        )
-                            .outerCircleColor(R.color.green)
-                            .targetCircleColor(R.color.white)
-                            .titleTextSize(22)
-                            .titleTextColor(R.color.white)
-                            .descriptionTextSize(14)
-                            .cancelable(true),
-                        object : TapTargetView.Listener() {
-                            override fun onTargetClick(view: TapTargetView) {
-                                super.onTargetClick(view)
-                                buttonOpen!!.performClick()
-                            }
-                        })
+                    onFirstRun()
                     // TODO: Explain gestures?
                     //  "Use vertical and horizontal gestures to change brightness, volume and seek in video"
                     mPrefs!!.markFirstRun()
@@ -651,6 +615,8 @@ import kotlin.math.abs
             })
         }
     }
+    open fun addViewInControls(controls: ViewGroup) {}
+    open fun onFirstRun() {}
 
     public override fun onStart() {
         super.onStart()
@@ -1504,7 +1470,7 @@ import kotlin.math.abs
         }
     }
 
-    private fun openFile(pickerInitialUri: Uri?) {
+    protected fun openFile(pickerInitialUri: Uri?) {
         var pickerInitialUri = pickerInitialUri
         val targetSdkVersion = applicationContext.applicationInfo.targetSdkVersion
         if (isTvBox && Build.VERSION.SDK_INT >= 30 && targetSdkVersion >= 30 && mPrefs!!.fileAccess == "auto" || mPrefs!!.fileAccess == "mediastore") {
@@ -1531,7 +1497,7 @@ import kotlin.math.abs
         }
     }
 
-    private fun loadSubtitleFile(pickerInitialUri: Uri?) {
+    fun loadSubtitleFile(pickerInitialUri: Uri?) {
         Toast.makeText(this@PlayerActivity, R.string.open_subtitles, Toast.LENGTH_SHORT).show()
         val targetSdkVersion = applicationContext.applicationInfo.targetSdkVersion
         if (isTvBox && Build.VERSION.SDK_INT >= 30 && targetSdkVersion >= 30 && mPrefs!!.fileAccess == "auto" || mPrefs!!.fileAccess == "mediastore") {
@@ -2254,7 +2220,7 @@ import kotlin.math.abs
         private const val CONTROL_TYPE_PLAY = 1
         private const val CONTROL_TYPE_PAUSE = 2
         var focusPlay = false
-        private var isTvBox = false
+        var isTvBox = false
         @JvmField
         var locked = false
         @JvmField
