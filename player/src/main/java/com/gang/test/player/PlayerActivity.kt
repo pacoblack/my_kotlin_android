@@ -84,6 +84,8 @@ import com.gang.test.player.Utils.toggleSystemUi
 import com.gang.test.player.dtpv.DoubleTapPlayerView
 import com.gang.test.player.dtpv.youtube.YouTubeOverlay
 import com.gang.test.player.dtpv.youtube.YouTubeOverlay.PerformListener
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
 import com.google.android.material.snackbar.Snackbar
 import com.homesoft.exo.extractor.AviExtractorsFactory
 import java.io.File
@@ -133,6 +135,7 @@ open class PlayerActivity : Activity() {
     private var buttonPiP: ImageButton? = null
     private var buttonAspectRatio: ImageButton? = null
     private var buttonRotation: ImageButton? = null
+    private var buttonOpen: ImageButton? = null
 
     private var mReceiver: BroadcastReceiver? = null
     lateinit var mPrefs: Prefs
@@ -266,6 +269,7 @@ open class PlayerActivity : Activity() {
         playerView?.let {
             initPlayerView(it)
         }
+        initOpenButton()
     }
 
 
@@ -622,8 +626,6 @@ open class PlayerActivity : Activity() {
             })
         }
     }
-    open fun addViewInControls(controls: ViewGroup) {}
-    open fun onFirstRun() {}
 
     public override fun onStart() {
         super.onStart()
@@ -1910,6 +1912,50 @@ open class PlayerActivity : Activity() {
         return null
     }
 
+    private fun initOpenButton(){
+        buttonOpen = ImageButton(this, null, 0, R.style.ExoStyledControls_Button_Bottom)
+        buttonOpen!!.setImageResource(R.drawable.ic_folder_open_24dp)
+        buttonOpen!!.id = View.generateViewId()
+        buttonOpen!!.contentDescription = getString(R.string.button_open)
+        buttonOpen!!.setOnClickListener {
+            openFile(
+                mPrefs!!.mediaUri
+            )
+        }
+        buttonOpen!!.setOnLongClickListener {
+            if (!isTvBox && mPrefs!!.askScope) {
+                askForScope(true, false)
+            } else {
+                loadSubtitleFile(mPrefs!!.mediaUri)
+            }
+            true
+        }
+    }
+
+     fun addViewInControls(controls: ViewGroup) {
+        controls.addView(buttonOpen)
+    }
+
+     fun onFirstRun(){
+        TapTargetView.showFor(this@PlayerActivity,
+            TapTarget.forView(
+                buttonOpen, getString(R.string.onboarding_open_title), getString(
+                    R.string.onboarding_open_description
+                )
+            )
+                .outerCircleColor(R.color.green)
+                .targetCircleColor(R.color.white)
+                .titleTextSize(22)
+                .titleTextColor(R.color.white)
+                .descriptionTextSize(14)
+                .cancelable(true),
+            object : TapTargetView.Listener() {
+                override fun onTargetClick(view: TapTargetView) {
+                    super.onTargetClick(view)
+                    buttonOpen!!.performClick()
+                }
+            })
+    }
     fun askForScope(loadSubtitlesOnCancel: Boolean, skipToNextOnCancel: Boolean) {
         val builder = AlertDialog.Builder(this@PlayerActivity)
         builder.setMessage(
