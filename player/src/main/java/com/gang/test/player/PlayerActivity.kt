@@ -84,8 +84,6 @@ import com.gang.test.player.Utils.toggleSystemUi
 import com.gang.test.player.dtpv.DoubleTapPlayerView
 import com.gang.test.player.dtpv.youtube.YouTubeOverlay
 import com.gang.test.player.dtpv.youtube.YouTubeOverlay.PerformListener
-import com.getkeepsafe.taptargetview.TapTarget
-import com.getkeepsafe.taptargetview.TapTargetView
 import com.google.android.material.snackbar.Snackbar
 import com.homesoft.exo.extractor.AviExtractorsFactory
 import java.io.File
@@ -97,31 +95,29 @@ import kotlin.math.abs
 @UnstableApi
 open class PlayerActivity : Activity() {
     private var playerListener: PlayerListener? = null
-    private var mReceiver: BroadcastReceiver? = null
     private var mAudioManager: AudioManager? = null
     private var mediaSession: MediaSession? = null
     private var trackSelector: DefaultTrackSelector? = null
     var playerView: CustomPlayerView? = null
+
     private var youTubeOverlay: YouTubeOverlay? = null
     private var mPictureInPictureParamsBuilder: Any? = null
-    lateinit var mPrefs: Prefs
     private var mBrightnessControl: BrightnessControl? = null
+
+    private var exoSettings: ImageButton? = null
+    private var exoPlayPause: ImageButton? = null
+    private var controlView: PlayerControlView? = null
+    private var exoTimeBar: CustomDefaultTimeBar? = null
+
+    var displayManager: DisplayManager? = null
+    var displayListener: DisplayManager.DisplayListener? = null
+
     private var videoLoading = false
     private var errorToShow: ExoPlaybackException? = null
     private var isScaling = false
     private var isScaleStarting = false
     private var scaleFactor = 1.0f
-    private var coordinatorLayout: CoordinatorLayout? = null
-    private var titleView: TextView? = null
 
-    private var buttonPiP: ImageButton? = null
-    private var buttonAspectRatio: ImageButton? = null
-    private var buttonRotation: ImageButton? = null
-    private var exoSettings: ImageButton? = null
-    private var exoPlayPause: ImageButton? = null
-    private var loadingProgressBar: ProgressBar? = null
-    private var controlView: PlayerControlView? = null
-    private var timeBar: CustomDefaultTimeBar? = null
     private var restoreOrientationLock = false
     private var restorePlayState = false
     private var restorePlayStateAllowed = false
@@ -132,6 +128,18 @@ open class PlayerActivity : Activity() {
     private var scrubbingStart: Long = 0
     var frameRendered = false
     private var alive = false
+
+    private var titleView: TextView? = null
+    private var buttonPiP: ImageButton? = null
+    private var buttonAspectRatio: ImageButton? = null
+    private var buttonRotation: ImageButton? = null
+
+    private var mReceiver: BroadcastReceiver? = null
+    lateinit var mPrefs: Prefs
+    private var coordinatorLayout: CoordinatorLayout? = null
+
+    private var loadingProgressBar: ProgressBar? = null
+
     private var nextUri: Uri? = null
     private var nextUriThread: Thread? = null
     var frameRateSwitchThread: Thread? = null
@@ -144,8 +152,7 @@ open class PlayerActivity : Activity() {
     var apiSubs: MutableList<MediaItem.SubtitleConfiguration> = ArrayList()
     var intentReturnResult = false
     var playbackFinished = false
-    var displayManager: DisplayManager? = null
-    var displayListener: DisplayManager.DisplayListener? = null
+
     var subtitleFinder: SubtitleFinder? = null
     var barsHider = Runnable {
         if (playerView != null && !controllerVisible) {
@@ -272,8 +279,8 @@ open class PlayerActivity : Activity() {
         playerView.controllerAutoShow = true
         (playerView as DoubleTapPlayerView?)!!.isDoubleTapEnabled = false
 
-        timeBar = playerView.findViewById(R.id.exo_progress)
-        timeBar?.addListener(object : TimeBar.OnScrubListener {
+        exoTimeBar = playerView.findViewById(R.id.exo_progress)
+        exoTimeBar?.addListener(object : TimeBar.OnScrubListener {
             override fun onScrubStart(timeBar: TimeBar, position: Long) {
                 if (player == null) {
                     return
@@ -478,7 +485,7 @@ open class PlayerActivity : Activity() {
         }
 
         // init time bar
-        timeBar?.let{
+        exoTimeBar?.let{
             it.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
             it.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
             try {
@@ -1157,10 +1164,10 @@ open class PlayerActivity : Activity() {
         chapterStarts = LongArray(0)
         if (haveMedia) {
             if (isNetworkUri) {
-                timeBar!!.setBufferedColor(DefaultTimeBar.DEFAULT_BUFFERED_COLOR)
+                exoTimeBar!!.setBufferedColor(DefaultTimeBar.DEFAULT_BUFFERED_COLOR)
             } else {
                 // https://github.com/google/ExoPlayer/issues/5765
-                timeBar!!.setBufferedColor(0x33FFFFFF)
+                exoTimeBar!!.setBufferedColor(0x33FFFFFF)
             }
             playerView!!.resizeMode = mPrefs!!.resizeMode
             if (mPrefs!!.resizeMode == AspectRatioFrameLayout.RESIZE_MODE_ZOOM) {
@@ -1381,9 +1388,9 @@ open class PlayerActivity : Activity() {
                         updateSubtitleViewMargin(format)
                     }
                     if (duration != C.TIME_UNSET && duration > TimeUnit.MINUTES.toMillis(20)) {
-                        timeBar!!.setKeyTimeIncrement(TimeUnit.MINUTES.toMillis(1))
+                        exoTimeBar!!.setKeyTimeIncrement(TimeUnit.MINUTES.toMillis(1))
                     } else {
-                        timeBar!!.setKeyCountIncrement(20)
+                        exoTimeBar!!.setKeyCountIncrement(20)
                     }
                     var switched = false
                     if (mPrefs!!.frameRateMatching) {
