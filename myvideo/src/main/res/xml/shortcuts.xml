@@ -1,0 +1,12 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="videos"
+        android:enabled="true"
+        android:icon="@mipmap/shortcut_videos"
+        android:shortcutShortLabel="@string/shortcut_videos">
+        <intent
+            android:action="${applicationId}.action.SHORTCUT_VIDEOS"
+            android:targetPackage="${applicationId}"
+            android:targetClass="OnlyPlayActivity" />
+    </shortcut>
+</shortcuts>

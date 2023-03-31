@@ -198,7 +198,7 @@ open class PlayerActivity : Activity() {
         val launchIntent = intent
         val action = launchIntent.action
         val type = launchIntent.type
-        if ("import com.gang.test.player.action.SHORTCUT_VIDEOS" == action) {
+        if ("com.gang.test.player.action.SHORTCUT_VIDEOS" == action) {
             openFile(moviesFolderUri)
         } else if (Intent.ACTION_SEND == action && "text/plain" == type) {
             val text = launchIntent.getStringExtra(Intent.EXTRA_TEXT)
