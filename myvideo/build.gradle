@@ -33,7 +33,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.documentfile:documentfile:1.0.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
-    implementation project(path: ':player')
+//    implementation project(path: ':player')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -49,4 +49,17 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-transformer:2.18.1'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.1'
     implementation "com.google.android.exoplayer:extension-rtmp:2.18.1"//rtmp直播流解码协议
+
+    //播放器(无UI交互)
+    implementation 'com.github.hty527.iPlayer:iplayer:2.1.21'
+    //UI交互组件,可根据需要使用
+    implementation 'com.github.hty527.iPlayer:widget:2.1.21'
+
+    //音视频预缓存+边播边存,根据需要使用
+    implementation 'com.github.hty527.iPlayer:cache:2.1.21'
+
+    //ijk音视频解码器,根据需要使用
+    //implementation 'com.github.hty527.iPlayer:ijk:2.1.21'
+    //exo音视频解码器,根据需要使用
+    implementation 'com.github.hty527.iPlayer:exo:2.1.21'
 }

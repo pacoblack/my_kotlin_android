@@ -12,6 +12,7 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.offline.DownloadService;
 import com.test.gang.cmake.Hello;
 import com.test.gang.cmake.NativeDemo;
+import com.test.gang.lib.video.IPlayerActivity;
 import com.test.gang.video.DemoDownloadService;
 import com.test.gang.video.DemoUtil;
 import com.test.gang.video.DownloadTracker;
@@ -47,15 +48,16 @@ public class MainActivity extends AppCompatActivity implements DownloadTracker.L
                 .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<MediaItem> mediaItems = new ArrayList<>(2);
-                MediaItem item = new MediaItem.Builder().setUri("http://www.nenu.edu.cn/_upload/article/videos/03/5f/7c999eed42e3aadc413d7f851f0e/0f50b3eb-9285-41d2-ac4d-6cc363651aad_B.mp4").build();
-                mediaItems.add(item);
-                Intent intent = new Intent(MainActivity.this, ExoPlayerActivity.class);
-                intent.putExtra(
-                        IntentUtil.PREFER_EXTENSION_DECODERS_EXTRA,
-                        true);
-                IntentUtil.addToIntent(mediaItems, intent);
-                startActivity(intent);
+//                List<MediaItem> mediaItems = new ArrayList<>(2);
+//                MediaItem item = new MediaItem.Builder().setUri("http://www.nenu.edu.cn/_upload/article/videos/03/5f/7c999eed42e3aadc413d7f851f0e/0f50b3eb-9285-41d2-ac4d-6cc363651aad_B.mp4").build();
+//                mediaItems.add(item);
+//                Intent intent = new Intent(MainActivity.this, ExoPlayerActivity.class);
+//                intent.putExtra(
+//                        IntentUtil.PREFER_EXTENSION_DECODERS_EXTRA,
+//                        true);
+//                IntentUtil.addToIntent(mediaItems, intent);
+//                startActivity(intent);
+                IPlayerActivity.Companion.startActivity(MainActivity.this, "http://www.nenu.edu.cn/_upload/article/videos/03/5f/7c999eed42e3aadc413d7f851f0e/0f50b3eb-9285-41d2-ac4d-6cc363651aad_B.mp4");
             }
         });
 //        startDownloadService();

@@ -16,8 +16,8 @@ import android.view.WindowInsetsController
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.gang.test.player.PlayerActivity
-import com.gang.test.player.Utils
+//import com.gang.test.player.PlayerActivity
+//import com.gang.test.player.Utils
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory
@@ -287,7 +287,7 @@ class OnlyPlayActivity : AppCompatActivity() {
             val method =
                 PlayerControlView::class.java.getDeclaredMethod(methodName, Player::class.java)
             method.isAccessible = true
-            method.invoke(controlView, PlayerActivity.player as Player?)
+//            method.invoke(controlView, PlayerActivity.player as Player?)
         } catch (e: NoSuchMethodException) {
             e.printStackTrace()
         } catch (e: SecurityException) {
@@ -444,9 +444,9 @@ class OnlyPlayActivity : AppCompatActivity() {
             var subtitleName = _subtitleName
             val subtitleMime = SubtitleUtils.getSubtitleMime(uri)
             val subtitleLanguage = SubtitleUtils.getSubtitleLanguage(uri)
-            if (subtitleLanguage == null && subtitleName == null) subtitleName = Utils.getFileName(
-                context!!, uri
-            )
+//            if (subtitleLanguage == null && subtitleName == null) subtitleName = Utils.getFileName(
+//                context!!, uri
+//            )
             val subtitleConfigurationBuilder = MediaItem.SubtitleConfiguration.Builder(uri)
                 .setMimeType(subtitleMime)
                 .setLanguage(subtitleLanguage)

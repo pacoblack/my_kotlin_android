@@ -18,10 +18,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".player.Demo3PlayerActivity" />
-        <activity android:name=".player.Demo2PlayerActivity" />
-        <activity android:name=".player.Demo1PlayerActivity" />
-        <activity android:name=".player.DemoPlayerActivity" />
     </application>
 
 </manifest>
