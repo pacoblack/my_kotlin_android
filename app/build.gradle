@@ -35,11 +35,13 @@ dependencies {
     implementation project(':videolibrary')
     implementation project(':network')
     implementation project(':myvideo')
+    implementation project(':torrent')
     implementation 'com.google.android.exoplayer:exoplayer:2.18.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.media2:media2-exoplayer:1.0.3'
+    implementation 'com.google.android.material:material:1.5.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -49,4 +51,6 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
     implementation 'io.github.meituan-dianping:router:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+
+    implementation 'com.nononsenseapps:filepicker:4.1.0'
 }

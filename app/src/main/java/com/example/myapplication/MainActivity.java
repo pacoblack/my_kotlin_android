@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.torrent.activities.TorrentActivity;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.offline.DownloadService;
 import com.test.gang.cmake.Hello;
@@ -57,7 +58,8 @@ public class MainActivity extends AppCompatActivity implements DownloadTracker.L
 //                        true);
 //                IntentUtil.addToIntent(mediaItems, intent);
 //                startActivity(intent);
-                IPlayerActivity.Companion.startActivity(MainActivity.this, "http://www.nenu.edu.cn/_upload/article/videos/03/5f/7c999eed42e3aadc413d7f851f0e/0f50b3eb-9285-41d2-ac4d-6cc363651aad_B.mp4");
+//                IPlayerActivity.Companion.startActivity(MainActivity.this, "http://www.nenu.edu.cn/_upload/article/videos/03/5f/7c999eed42e3aadc413d7f851f0e/0f50b3eb-9285-41d2-ac4d-6cc363651aad_B.mp4");
+                TorrentActivity.Companion.startActivity(MainActivity.this);
             }
         });
 //        startDownloadService();
