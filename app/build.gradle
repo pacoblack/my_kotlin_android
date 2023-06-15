@@ -31,7 +31,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':cmakelibrary')
+//    implementation project(':cmakelibrary')
     implementation project(':videolibrary')
     implementation project(':network')
     implementation project(':myvideo')

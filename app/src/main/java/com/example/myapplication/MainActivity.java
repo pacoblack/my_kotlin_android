@@ -11,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.myapplication.torrent.activities.TorrentActivity;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.offline.DownloadService;
-import com.test.gang.cmake.Hello;
-import com.test.gang.cmake.NativeDemo;
+//import com.test.gang.cmake.Hello;
+//import com.test.gang.cmake.NativeDemo;
 import com.test.gang.lib.video.IPlayerActivity;
 import com.test.gang.video.DemoDownloadService;
 import com.test.gang.video.DemoUtil;
@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity implements DownloadTracker.L
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(MainActivity.this, NativeDemo.helloFromJNI(), Toast.LENGTH_LONG).show();
-                        Hello hello=new Hello();
-                        hello.test();
+//                        Toast.makeText(MainActivity.this, NativeDemo.helloFromJNI(), Toast.LENGTH_LONG).show();
+//                        Hello hello=new Hello();
+//                        hello.test();
                     }
                 });
         findViewById((R.id.video_btn))

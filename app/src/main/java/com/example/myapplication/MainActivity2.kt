@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.test.gang.cmake.Hello
-import com.test.gang.cmake.NativeDemo
+//import com.test.gang.cmake.Hello
+//import com.test.gang.cmake.NativeDemo
 
 class MainActivity2 : AppCompatActivity() {
     init {
@@ -19,10 +19,10 @@ class MainActivity2 : AppCompatActivity() {
         WaterFallLayout.init(this)
         findViewById<View>(R.id.jni_btn)
             .setOnClickListener {
-                Toast.makeText(this@MainActivity2, NativeDemo.helloFromJNI(), Toast.LENGTH_LONG)
-                    .show()
-                val hello = Hello()
-                hello.test()
+//                Toast.makeText(this@MainActivity2, NativeDemo.helloFromJNI(), Toast.LENGTH_LONG)
+//                    .show()
+//                val hello = Hello()
+//                hello.test()
             }
     }
 }

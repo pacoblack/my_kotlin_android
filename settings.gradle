@@ -1,5 +1,5 @@
 include ':app'
-include ':cmakelibrary'
+//include ':cmakelibrary'
 include ':videolibrary'
 include ':proxylibrary'
 include ':network'
