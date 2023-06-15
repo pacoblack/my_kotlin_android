@@ -7,11 +7,11 @@ include ':player'
 include ':filechooser'
 include ':myvideo'
 include ':torrent'
-setBinding(new Binding([gradle: this]))
-evaluate(new File(
-        settingsDir.parentFile,
-        'my_kotlin_app/mix_flutter/.android/include_flutter.groovy'
-))
-include ':mix_flutter'
-project(':mix_flutter').projectDir = new File('my_kotlin_app/mix_flutter')
-include ':flutter_bridge'
+//setBinding(new Binding([gradle: this]))
+//evaluate(new File(
+//        settingsDir.parentFile,
+//        'my_kotlin_app/mix_flutter/.android/include_flutter.groovy'
+//))
+//include ':mix_flutter'
+//project(':mix_flutter').projectDir = new File('my_kotlin_app/mix_flutter')
+//include ':flutter_bridge'

@@ -3,7 +3,7 @@
 # your build.
 #定义Cmake 版本号，每个版本新增功能，参考CMake官方文档
 cmake_minimum_required(VERSION 3.4.1)
-
+project(cmakelibrary)
 #设置生成的so动态库最后输出的路径
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/../jniLibs/${ANDROID_ABI})
 
