@@ -5,32 +5,30 @@ plugins {
 apply from: "../commons.gradle"
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.documentfile:documentfile:1.0.1'
+    implementation rootProject.ext.dependencies.kotlinStdlib
+    implementation rootProject.ext.dependencies.documentfile
 //    implementation project(path: ':player')
 
 //    implementation project(':player')
 
-    implementation 'com.google.android.exoplayer:exoplayer:2.18.1'
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.18.1'
-    implementation 'com.google.android.exoplayer:exoplayer-dash:2.18.1'
-    implementation 'com.google.android.exoplayer:exoplayer-hls:2.18.1'
-    implementation 'com.google.android.exoplayer:exoplayer-rtsp:2.18.1'
-    implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.1'
-    implementation 'com.google.android.exoplayer:exoplayer-transformer:2.18.1'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.1'
-    implementation "com.google.android.exoplayer:extension-rtmp:2.18.1"//rtmp直播流解码协议
+    implementation rootProject.ext.dependencies.exoplayer
+    implementation rootProject.ext.dependencies.exoplayerCore
+    implementation rootProject.ext.dependencies.exoplayerDash
+    implementation rootProject.ext.dependencies.exoplayerHls
+    implementation rootProject.ext.dependencies.exoplayerRtsp
+    implementation rootProject.ext.dependencies.exoplayerSmoothstreaming
+    implementation rootProject.ext.dependencies.exoplayerTransformer
+    implementation rootProject.ext.dependencies.exoplayerUi
+    implementation rootProject.ext.dependencies.extensionRtmp
 
     //播放器(无UI交互)
-    implementation 'com.github.hty527.iPlayer:iplayer:2.1.21'
+    implementation rootProject.ext.dependencies.iplayer
     //UI交互组件,可根据需要使用
-    implementation 'com.github.hty527.iPlayer:widget:2.1.21'
+    implementation rootProject.ext.dependencies.iplayerWidget
 
     //音视频预缓存+边播边存,根据需要使用
-    implementation 'com.github.hty527.iPlayer:cache:2.1.21'
+    implementation rootProject.ext.dependencies.iplayerCache
 
-    //ijk音视频解码器,根据需要使用
-    //implementation 'com.github.hty527.iPlayer:ijk:2.1.21'
     //exo音视频解码器,根据需要使用
-    implementation 'com.github.hty527.iPlayer:exo:2.1.21'
+    implementation rootProject.ext.dependencies.iplayerExo
 }

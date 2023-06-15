@@ -1,6 +1,77 @@
-project.ext {
+ext {
     proxyModule = [
-            versionName: "1.0.0",
-            versionCode: 1
+        versionName: "1.0.0",
+        versionCode: 1
+    ]
+
+    versions=[
+        media3_version : "1.0.0-rc01",
+        kotlin_version : "1.6.0",
+    ]
+
+    dependencies = [
+        exoplayer                  : "com.google.android.exoplayer:exoplayer:2.18.1",
+        exoplayerCore              : "com.google.android.exoplayer:exoplayer-core:2.18.1",
+        exoplayerDash              : "com.google.android.exoplayer:exoplayer-dash:2.18.1",
+        exoplayerHls               : "com.google.android.exoplayer:exoplayer-hls:2.18.1",
+        exoplayerRtsp              : "com.google.android.exoplayer:exoplayer-rtsp:2.18.1",
+        exoplayerSmoothstreaming   : "com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.1",
+        exoplayerTransformer       : "com.google.android.exoplayer:exoplayer-transformer:2.18.1",
+        exoplayerUi                : "com.google.android.exoplayer:exoplayer-ui:2.18.1",
+        extensionRtmp              : "com.google.android.exoplayer:extension-rtmp:2.18.1",//rtmp直播流解码协议
+
+        media2Exoplayer            : "androidx.media2:media2-exoplayer:1.0.3",
+
+        //播放器(无UI交互)
+        iplayer                    : "com.github.hty527.iPlayer:iplayer:2.1.21",
+        //UI交互组件,可根据需要使用
+        iplayerWidget              : "com.github.hty527.iPlayer:widget:2.1.21",
+        //音视频预缓存+边播边存,根据需要使用
+        iplayerCache               : "com.github.hty527.iPlayer:cache:2.1.21",
+        //exo音视频解码器,根据需要使用
+        iplayerExo                 : "com.github.hty527.iPlayer:exo:2.1.21",
+
+        media3Session              : "androidx.media3:media3-session:$versions.media3_version",
+        media3Datasource           : "androidx.media3:media3-datasource:$versions.media3_version",
+        media3Decoder              : "androidx.media3:media3-decoder:$versions.media3_version",
+        media3Common               : "androidx.media3:media3-common:$versions.media3_version",
+        media3ExoplayerDash        : "androidx.media3:media3-exoplayer-dash:$versions.media3_version",
+        media3ExoplayerHls         : "androidx.media3:media3-exoplayer-hls:$versions.media3_version",
+        media3ExoplayerSmoothstreaming: "androidx.media3:media3-exoplayer-smoothstreaming:$versions.media3_version",
+        media3ExoplayerRtsp        : "androidx.media3:media3-exoplayer-rtsp:$versions.media3_version",
+
+        ffmpegKitHttps             : "com.arthenica:ffmpeg-kit-https:5.1.LTS",
+
+        kotlinxCoroutinesCore      : "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2",
+        leakcanaryAndroid          : "com.squareup.leakcanary:leakcanary-android:2.9.1",
+        router                     : "io.github.meituan-dianping:router:1.2.1",
+        filepicker                 : "com.nononsenseapps:filepicker:4.1.0",
+        kotlinStdlib               : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
+        checkerQual                : "org.checkerframework:checker-qual:3.13.0",
+        documentfile               : "androidx.documentfile:documentfile:1.0.1",
+
+        //retrofit2
+        retrofit                   : "com.squareup.retrofit2:retrofit:2.6.0",
+        //这里用api 是为了让其他模块也可以使用gson
+        converterGson              : "com.squareup.retrofit2:converter-gson:2.4.0",
+        //日志拦截器
+        loggingInterceptor         : "com.squareup.okhttp3:logging-interceptor:3.12.12",
+
+        rxjava                     : "io.reactivex.rxjava2:rxjava:2.2.12",
+        adapterRxjava2             : "com.squareup.retrofit2:adapter-rxjava2:2.6.0",
+        //rxjava
+        rxandroid                  : "io.reactivex.rxjava2:rxandroid:2.1.1",
+
+        preference                 : "androidx.preference:preference:1.2.0",
+            
+        //图片加载框架
+        glide                      : "com.github.bumptech.glide:glide:4.11.0",
+        glideCompiler              : "com.github.bumptech.glide:compiler:4.11.0",
+        okhttp3                    : "com.squareup.okhttp3:okhttp:4.9.2",
+
+        icu4j                      : "com.ibm.icu:icu4j:72.1",
+        slf4jAndroid              : 'org.slf4j:slf4j-android:1.7.21',
+
+        taptargetview              : "com.getkeepsafe.taptargetview:taptargetview:1.13.3"
     ]
 }

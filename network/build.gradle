@@ -6,22 +6,22 @@ apply from: "../commons.gradle"
 
 dependencies {
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation rootProject.ext.dependencies.kotlinStdlib
 
     //retrofit2
-    api 'com.squareup.retrofit2:retrofit:2.6.0'
+    api rootProject.ext.dependencies.retrofit
     //这里用api 是为了让其他模块也可以使用gson
-    api 'com.squareup.retrofit2:converter-gson:2.4.0'
+    api rootProject.ext.dependencies.converterGson
     //日志拦截器
-    api 'com.squareup.okhttp3:logging-interceptor:3.12.12'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
+    api rootProject.ext.dependencies.loggingInterceptor
+    api rootProject.ext.dependencies.adapterRxjava2
     //rxjava
-    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    api 'io.reactivex.rxjava2:rxjava:2.2.12'
-    api 'androidx.preference:preference:1.2.0'
+    api rootProject.ext.dependencies.rxandroid
+    api rootProject.ext.dependencies.rxjava
+    api rootProject.ext.dependencies.preference
     //图片加载框架
-    api 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    api rootProject.ext.dependencies.glide
+    annotationProcessor rootProject.ext.dependencies.glideCompiler
 
-    implementation 'com.squareup.okhttp3:okhttp:4.9.2'
+    implementation rootProject.ext.dependencies.okhttp3
 }

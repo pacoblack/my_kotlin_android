@@ -25,13 +25,13 @@ dependencies {
     implementation project(':network')
     implementation project(':myvideo')
     implementation project(':torrent')
-    implementation 'com.google.android.exoplayer:exoplayer:2.18.1'
-    implementation 'androidx.media2:media2-exoplayer:1.0.3'
+    implementation rootProject.ext.dependencies.exoplayer
+    implementation rootProject.ext.dependencies.media2Exoplayer
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
+    implementation rootProject.ext.dependencies.kotlinxCoroutinesCore
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
-    implementation 'io.github.meituan-dianping:router:1.2.1'
+    debugImplementation rootProject.ext.dependencies.leakcanaryAndroid
+    implementation rootProject.ext.dependencies.router
 
-    implementation 'com.nononsenseapps:filepicker:4.1.0'
+    implementation rootProject.ext.dependencies.filepicker
 }
