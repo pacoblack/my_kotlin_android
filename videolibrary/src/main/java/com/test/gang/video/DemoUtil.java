@@ -6,6 +6,8 @@ import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.database.DatabaseProvider;
 import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
+import com.google.android.exoplayer2.offline.DefaultDownloadIndex;
+import com.google.android.exoplayer2.offline.DefaultDownloaderFactory;
 import com.google.android.exoplayer2.offline.DownloadManager;
 import com.google.android.exoplayer2.ui.DownloadNotificationHelper;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -149,6 +151,22 @@ public class DemoUtil {
                             getDownloadCache(context),
                             getHttpDataSourceFactory(context),
                             Executors.newFixedThreadPool(/* nThreads= */ 6));
+            downloadTracker =
+                    new DownloadTracker(context, getHttpDataSourceFactory(context), downloadManager);
+        }
+    }
+
+    private static synchronized void ensureDownloadManagerInitialized(Context context, int index) {
+        if (downloadManager == null) {
+            downloadManager = new DownloadManager(
+                    context,
+                    new DefaultDownloadIndex(getDatabaseProvider(context)),
+                    new DefaultDownloaderFactory(
+                            new CacheDataSource.Factory()
+                                    .setCache(getDownloadCache(context))
+                                    .setUpstreamDataSourceFactory(getHttpDataSourceFactory(context)),
+                            Executors.newFixedThreadPool(/* nThreads= */ 6))
+            );
             downloadTracker =
                     new DownloadTracker(context, getHttpDataSourceFactory(context), downloadManager);
         }
