@@ -21,6 +21,7 @@
         <activity android:name=".torrent.activities.TorrentActivity"
                   android:exported="false"
                   android:taskAffinity="com.example.myapplication"/>
+        <activity android:name=".DownloadVideoActivity"/>
     </application>
 
 </manifest>

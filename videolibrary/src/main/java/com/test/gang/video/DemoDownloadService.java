@@ -35,7 +35,7 @@ public class DemoDownloadService extends DownloadService {
     }
 
     @Override
-    protected DownloadManager getDownloadManager() {
+    public DownloadManager getDownloadManager() {
         // This will only happen once, because getDownloadManager is guaranteed to be called only once
         // in the life cycle of the process.
         DownloadManager downloadManager = DemoUtil.getDownloadManager(/* context= */ this);
