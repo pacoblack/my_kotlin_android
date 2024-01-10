@@ -43,22 +43,8 @@ class DownloadVideoActivity : AppCompatActivity() {
     // 实际的下载文件方法，这里仅作占位，具体实现请参考ExoPlayer或其他库的下载功能
     @SuppressLint("ServiceCast")
     private fun downloadFileFromUrl(context: Context, urlString: String) {
-
-        // Starting the service in the foreground causes notification flicker if there is no scheduled
-        // action. Starting it in the background throws an exception if the app is in the background too
-        // (e.g. if device screen is locked).
-        try {
-            DownloadService.start(this, DemoDownloadService::class.java)
-        } catch (e: IllegalStateException) {
-            DownloadService.startForeground(this, DemoDownloadService::class.java)
-        }
-
         val downloadManager: DownloadManager =
             ((context.getSystemService(DOWNLOAD_SERVICE)) as DemoDownloadService).downloadManager
-
-            // 创建下载请求，指定最终存储路径（也可以根据需要自动生成）
-        val destinationFile: File = File(context.getExternalFilesDir(Environment.DIRECTORY_MOVIES), "video.mp4")
-        val destinationUri = Uri.fromFile(destinationFile)
 
         val request: DownloadRequest = DownloadRequest
             .Builder(urlString, Uri.parse(urlString))

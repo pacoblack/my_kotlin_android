@@ -41,7 +41,9 @@
         <service android:name=".DemoDownloadService"
                 android:exported="false">
             <intent-filter>
+                <action android:name="com.google.android.exoplayer.downloadService.action.INIT"/>
                 <action android:name="com.google.android.exoplayer.downloadService.action.RESTART"/>
+                <action android:name="com.google.android.exoplayer.downloadService.action.ADD_DOWNLOAD"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
