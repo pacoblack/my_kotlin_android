@@ -4,16 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.gang.video.service.DemoDownloadService
 import com.google.android.exoplayer2.offline.DownloadManager
 import com.google.android.exoplayer2.offline.DownloadRequest
-import com.google.android.exoplayer2.offline.DownloadService
-import com.test.gang.video.DemoDownloadService
-import java.io.File
+import com.google.android.exoplayer2.upstream.DataSource
 
 
 class DownloadVideoActivity : AppCompatActivity() {

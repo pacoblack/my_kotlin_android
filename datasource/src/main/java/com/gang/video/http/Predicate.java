@@ -1,4 +1,4 @@
-package com.test.gang.video.ext;
+package com.gang.video.http;
 
 public interface Predicate<T> {
 

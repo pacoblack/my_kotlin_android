@@ -1,10 +1,11 @@
-package com.test.gang.video;
+package com.gang.video.service;
 
-import static com.test.gang.video.DemoUtil.DOWNLOAD_NOTIFICATION_CHANNEL_ID;
+import static com.gang.video.service.DemoUtil.DOWNLOAD_NOTIFICATION_CHANNEL_ID;
 
 import android.app.Notification;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.offline.Download;
@@ -14,6 +15,7 @@ import com.google.android.exoplayer2.scheduler.PlatformScheduler;
 import com.google.android.exoplayer2.scheduler.Requirements;
 import com.google.android.exoplayer2.scheduler.Scheduler;
 import com.google.android.exoplayer2.ui.DownloadNotificationHelper;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.util.NotificationUtil;
 import com.google.android.exoplayer2.util.Util;
 
@@ -28,10 +30,14 @@ public class DemoDownloadService extends DownloadService {
     public DemoDownloadService() {
         super(
                 FOREGROUND_NOTIFICATION_ID,
-                DEFAULT_FOREGROUND_NOTIFICATION_UPDATE_INTERVAL,
+                DownloadService.DEFAULT_FOREGROUND_NOTIFICATION_UPDATE_INTERVAL,
                 DOWNLOAD_NOTIFICATION_CHANNEL_ID,
                 R.string.exo_download_notification_channel_name,
                 /* channelDescriptionResourceId= */ 0);
+    }
+
+    public static void setHttpDataSource(@NonNull DataSource.Factory dataSourceFactory){
+        DemoUtil.setHttpDataSource(dataSourceFactory);
     }
 
     @Override

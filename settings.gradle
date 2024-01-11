@@ -15,3 +15,5 @@ include ':torrent'
 //include ':mix_flutter'
 //project(':mix_flutter').projectDir = new File('my_kotlin_app/mix_flutter')
 //include ':flutter_bridge'
+include ':video-service'
+include ':datasource'

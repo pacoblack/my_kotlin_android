@@ -1,7 +1,9 @@
-package com.test.gang.video;
+package com.gang.video.service;
 
 import android.content.Context;
-
+import androidx.annotation.NonNull;
+import com.gang.video.http.HttpEventListener;
+import com.gang.video.http.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.database.DatabaseProvider;
@@ -12,24 +14,18 @@ import com.google.android.exoplayer2.offline.DownloadManager;
 import com.google.android.exoplayer2.ui.DownloadNotificationHelper;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.NoOpCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
-import com.google.android.exoplayer2.util.Util;
-import com.test.gang.video.ext.HttpEventListener;
-import com.test.gang.video.ext.OkHttpDataSourceFactory;
-
+import okhttp3.Call;
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-import okhttp3.Call;
-import okhttp3.ConnectionPool;
-import okhttp3.OkHttpClient;
 
 public class DemoUtil {
     public static final String DOWNLOAD_NOTIFICATION_CHANNEL_ID = "download_channel";
@@ -64,12 +60,11 @@ public class DemoUtil {
 
     public static synchronized DataSource.Factory getHttpDataSourceFactory(Context context) {
         if (httpDataSourceFactory == null) {
-            String userAgent = Util.getUserAgent(context, "ExamplePlayer");
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             builder.eventListenerFactory(HttpEventListener.FACTORY);
             builder.connectionPool(new ConnectionPool(5, 2, TimeUnit.MINUTES));
             OkHttpClient client = builder.build();
-            httpDataSourceFactory = new DefaultDataSourceFactory(context, new OkHttpDataSourceFactory((Call.Factory)client, userAgent));
+            httpDataSourceFactory = new OkHttpDataSourceFactory((Call.Factory)client, "DefaultDownloadAgent");
         }
         return httpDataSourceFactory;
     }
@@ -173,4 +168,8 @@ public class DemoUtil {
     }
 
     private DemoUtil() {}
+
+    public static synchronized void setHttpDataSource(@NonNull DataSource.Factory dataSourceFactory) {
+        httpDataSourceFactory = dataSourceFactory;
+    }
 }

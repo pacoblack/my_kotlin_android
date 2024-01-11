@@ -1,4 +1,4 @@
-package com.test.gang.video;
+package com.gang.video.service;
 
 import android.app.Dialog;
 import android.content.DialogInterface;

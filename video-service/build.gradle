@@ -5,6 +5,7 @@ plugins {
 apply from: "../commons.gradle"
 
 dependencies {
+    implementation project(path: ':datasource')
     compileOnly rootProject.ext.dependencies.checkerQual
     api rootProject.ext.dependencies.exoplayer
     implementation rootProject.ext.dependencies.exoplayerCore
@@ -14,8 +15,7 @@ dependencies {
     implementation rootProject.ext.dependencies.exoplayerSmoothstreaming
     implementation rootProject.ext.dependencies.exoplayerTransformer
     implementation rootProject.ext.dependencies.exoplayerUi
-//    implementation 'com.google.android.exoplayer:extension-ima
-    implementation project(':proxylibrary')
+
+    implementation provided(':datasource')
     implementation project(':network')
-    implementation project(':video-service')
 }

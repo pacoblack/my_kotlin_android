@@ -1,11 +1,7 @@
-package com.test.gang.video.ext;
-
-import static com.google.android.exoplayer2.util.Util.castNonNull;
+package com.gang.video.http;
 
 import android.net.Uri;
-
 import androidx.annotation.Nullable;
-
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerLibraryInfo;
 import com.google.android.exoplayer2.upstream.BaseDataSource;
@@ -14,6 +10,7 @@ import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.Util;
+import okhttp3.*;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -23,15 +20,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import okhttp3.CacheControl;
-import okhttp3.Call;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class OkHttpDataSource extends BaseDataSource implements HttpDataSource {
 
@@ -369,7 +357,7 @@ public class OkHttpDataSource extends BaseDataSource implements HttpDataSource {
 
         while (bytesSkipped != bytesToSkip) {
             int readLength = (int) Math.min(bytesToSkip - bytesSkipped, SKIP_BUFFER.length);
-            int read = castNonNull(responseByteStream).read(SKIP_BUFFER, 0, readLength);
+            int read = Util.castNonNull(responseByteStream).read(SKIP_BUFFER, 0, readLength);
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedIOException();
             }
@@ -407,7 +395,7 @@ public class OkHttpDataSource extends BaseDataSource implements HttpDataSource {
             readLength = (int) Math.min(readLength, bytesRemaining);
         }
 
-        int read = castNonNull(responseByteStream).read(buffer, offset, readLength);
+        int read = Util.castNonNull(responseByteStream).read(buffer, offset, readLength);
         if (read == -1) {
             if (bytesToRead != C.LENGTH_UNSET) {
                 // End of stream reached having not read sufficient data.

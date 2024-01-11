@@ -1,4 +1,4 @@
-package com.test.gang.video;
+package com.gang.video.service;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

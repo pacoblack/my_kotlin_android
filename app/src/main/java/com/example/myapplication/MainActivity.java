@@ -1,27 +1,18 @@
 package com.example.myapplication;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.torrent.activities.TorrentActivity;
-import com.google.android.exoplayer2.MediaItem;
+import com.gang.video.service.DemoDownloadService;
+import com.gang.video.service.DemoUtil;
+import com.gang.video.service.DownloadTracker;
 import com.google.android.exoplayer2.offline.DownloadService;
 //import com.test.gang.cmake.Hello;
 //import com.test.gang.cmake.NativeDemo;
-import com.test.gang.lib.video.IPlayerActivity;
-import com.test.gang.video.DemoDownloadService;
-import com.test.gang.video.DemoUtil;
-import com.test.gang.video.DownloadTracker;
-import com.test.gang.video.IntentUtil;
-import com.test.gang.video.ExoPlayerActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements DownloadTracker.Listener{
     static {
