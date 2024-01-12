@@ -10,18 +10,25 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:networkSecurityConfig="@xml/network_security_config">
-        <activity android:name=".MainActivity" android:taskAffinity="com.example.myapplication"
-                android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+<!--        <activity android:name=".MainActivity" android:taskAffinity="com.example.myapplication"-->
+<!--                android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN"/>-->
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+<!--                <category android:name="android.intent.category.LAUNCHER"/>-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
         <activity android:name=".torrent.activities.TorrentActivity"
                   android:exported="false"
                   android:taskAffinity="com.example.myapplication"/>
         <activity android:name=".DownloadVideoActivity"/>
+        <activity android:name=".HomeActivity"
+                  android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

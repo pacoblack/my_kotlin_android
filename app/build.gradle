@@ -25,7 +25,7 @@ dependencies {
     implementation project(':network')
     implementation project(':myvideo')
     implementation project(':torrent')
-    implementation provided(':video-service')
+    implementation project(':video-service')
     implementation rootProject.ext.dependencies.exoplayer
     implementation rootProject.ext.dependencies.media2Exoplayer
 
@@ -44,4 +44,6 @@ dependencies {
     implementation 'com.jwkj:M3U8Manger:v2.3.0'
     //ffmpeg视频处理
     implementation 'com.github.yangjie10930:EpMedia:v0.9.5'
+
+    implementation 'com.google.android.material:material:1.6.0'
 }

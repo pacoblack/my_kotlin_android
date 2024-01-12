@@ -16,6 +16,6 @@ dependencies {
     implementation rootProject.ext.dependencies.exoplayerTransformer
     implementation rootProject.ext.dependencies.exoplayerUi
 
-    implementation provided(':datasource')
+    implementation project(':datasource')
     implementation project(':network')
 }
