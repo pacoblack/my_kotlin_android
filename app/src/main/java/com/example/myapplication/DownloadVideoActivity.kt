@@ -3,15 +3,13 @@ package com.example.myapplication
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.gang.video.service.DemoDownloadService
-import com.google.android.exoplayer2.offline.DownloadManager
-import com.google.android.exoplayer2.offline.DownloadRequest
+import com.google.android.exoplayer2.offline.DownloadService
 import com.test.gang.lib.video.IPlayerActivity
 
 
@@ -27,12 +25,15 @@ class DownloadVideoActivity : AppCompatActivity() {
         downloadUrlInput = findViewById(R.id.download_url_input)
         startDownloadButton = findViewById(R.id.start_download_button)
         startPlayButton = findViewById(R.id.start_play_button)
+        downloadUrlInput.setText("http://www.nenu.edu.cn/_upload/article/videos/03/5f/7c999eed42e3aadc413d7f851f0e/0f50b3eb-9285-41d2-ac4d-6cc363651aad_B.mp4")
 
         // 假设你已经有了一个自定义的downloadFileFromUrl()方法用于下载文件
         startDownloadButton.setOnClickListener {
             val url = downloadUrlInput.text.toString().trim { it <= ' ' }
+            println("###setOnClickListener ...")
             if (url.isNotEmpty()) {
                 // 这里仅作为示例，你需要替换为实际的下载逻辑
+                println("###setOnClickListener isNotEmpty")
                 downloadFileFromUrl(this@DownloadVideoActivity, url)
             } else {
                 // 输入框为空时提示用户
@@ -59,13 +60,30 @@ class DownloadVideoActivity : AppCompatActivity() {
     // 实际的下载文件方法，这里仅作占位，具体实现请参考ExoPlayer或其他库的下载功能
     @SuppressLint("ServiceCast")
     private fun downloadFileFromUrl(context: Context, urlString: String) {
-        val downloadManager: DownloadManager =
-            ((context.getSystemService(DOWNLOAD_SERVICE)) as DemoDownloadService).downloadManager
 
-        val request: DownloadRequest = DownloadRequest
-            .Builder(urlString, Uri.parse(urlString))
-            .build()
+//        val downloadManager: DownloadManager = DemoUtil.getDownloadManager(context)
+//        println("###setOnClickListener 1")
+//        var downloadRequest = DownloadRequest
+//            .Builder("1234", Uri.parse(urlString))
+//            .build()
+//        println("###setOnClickListener 2")
+////        downloadManager.addDownload(request)
+//
+//        println("###setOnClickListener done")
+////        DownloadService.start()
+//        DownloadService.sendAddDownload(context, DemoDownloadService::class.java, downloadRequest,/* foreground= */ true);
 
-        downloadManager.addDownload(request)
+        startDownloadService()
+    }
+
+    open fun startDownloadService() {
+        // Starting the service in the foreground causes notification flicker if there is no scheduled
+        // action. Starting it in the background throws an exception if the app is in the background too
+        // (e.g. if device screen is locked).
+        try {
+            DownloadService.start(this, DemoDownloadService::class.java)
+        } catch (e: IllegalStateException) {
+            DownloadService.startForeground(this, DemoDownloadService::class.java)
+        }
     }
 }

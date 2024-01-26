@@ -5,6 +5,7 @@ import static com.gang.video.service.DemoUtil.DOWNLOAD_NOTIFICATION_CHANNEL_ID;
 import android.app.Notification;
 import android.content.Context;
 
+import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -34,6 +35,7 @@ public class DemoDownloadService extends DownloadService {
                 DOWNLOAD_NOTIFICATION_CHANNEL_ID,
                 R.string.exo_download_notification_channel_name,
                 /* channelDescriptionResourceId= */ 0);
+        System.out.println("###DemoDownloadService");
     }
 
     public static void setHttpDataSource(@NonNull DataSource.Factory dataSourceFactory){
@@ -41,9 +43,22 @@ public class DemoDownloadService extends DownloadService {
     }
 
     @Override
+    public void onCreate() {
+        System.out.println("###onCreate");
+        super.onCreate();
+    }
+
+    @Override
+    public int onStartCommand(@Nullable @org.jetbrains.annotations.Nullable Intent intent, int flags, int startId) {
+        System.out.println("###onStartCommand");
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
     public DownloadManager getDownloadManager() {
         // This will only happen once, because getDownloadManager is guaranteed to be called only once
-        // in the life cycle of the process.
+        // in the life cycle of the process.\
+        System.out.println("###getDownloadManager");
         DownloadManager downloadManager = DemoUtil.getDownloadManager(/* context= */ this);
         DownloadNotificationHelper downloadNotificationHelper =
                 DemoUtil.getDownloadNotificationHelper(/* context= */ this);
@@ -95,6 +110,7 @@ public class DemoDownloadService extends DownloadService {
         public void onDownloadChanged(
                 DownloadManager downloadManager, Download download, @Nullable Exception finalException) {
             Notification notification;
+            System.out.println("###onDownloadChanged" + download.state+", " + download.contentLength);
             if (download.state == Download.STATE_COMPLETED) {
                 notification =
                         notificationHelper.buildDownloadCompletedNotification(
