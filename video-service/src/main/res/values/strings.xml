@@ -42,4 +42,6 @@
 
     <string name="prefer_extension_decoders">Prefer extension decoders</string>
     <string name="application_name">video_player</string>
+
+    <string name="post_notification_not_granted">Notifications suppressed. Grant permission to see download notifications.</string>
 </resources>
