@@ -8,8 +8,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.gang.video.service.DemoDownloadService
-import com.google.android.exoplayer2.offline.DownloadService
 import com.test.gang.lib.video.IPlayerActivity
 
 
@@ -77,13 +75,6 @@ class DownloadVideoActivity : AppCompatActivity() {
     }
 
     open fun startDownloadService() {
-        // Starting the service in the foreground causes notification flicker if there is no scheduled
-        // action. Starting it in the background throws an exception if the app is in the background too
-        // (e.g. if device screen is locked).
-        try {
-            DownloadService.start(this, DemoDownloadService::class.java)
-        } catch (e: IllegalStateException) {
-            DownloadService.startForeground(this, DemoDownloadService::class.java)
-        }
+
     }
 }

@@ -7,25 +7,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.torrent.activities.TorrentActivity;
-import com.gang.video.service.DemoDownloadService;
-import com.gang.video.service.DemoUtil;
-import com.gang.video.service.DownloadTracker;
 import com.google.android.exoplayer2.offline.DownloadService;
 //import com.test.gang.cmake.Hello;
 //import com.test.gang.cmake.NativeDemo;
 
-public class MainActivity extends AppCompatActivity implements DownloadTracker.Listener{
+public class MainActivity extends AppCompatActivity {
     static {
         System.loadLibrary("native-lib");
     }
 
-    private DownloadTracker downloadTracker;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        downloadTracker = DemoUtil.getDownloadTracker(/* context= */ this);
         WaterFallLayout.init(this);
         findViewById(R.id.jni_btn)
                 .setOnClickListener(new View.OnClickListener() {
@@ -54,34 +49,5 @@ public class MainActivity extends AppCompatActivity implements DownloadTracker.L
             }
         });
 //        startDownloadService();
-    }
-
-    /** Start the download service if it should be running but it's not currently. */
-    private void startDownloadService() {
-        // Starting the service in the foreground causes notification flicker if there is no scheduled
-        // action. Starting it in the background throws an exception if the app is in the background too
-        // (e.g. if device screen is locked).
-        try {
-            DownloadService.start(this, DemoDownloadService.class);
-        } catch (IllegalStateException e) {
-            DownloadService.startForeground(this, DemoDownloadService.class);
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        downloadTracker.addListener(this);
-    }
-
-    @Override
-    public void onStop() {
-        downloadTracker.removeListener(this);
-        super.onStop();
-    }
-
-    @Override
-    public void onDownloadsChanged() {
-
     }
 }
