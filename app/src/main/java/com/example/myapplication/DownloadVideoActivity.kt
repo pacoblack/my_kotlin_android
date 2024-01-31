@@ -3,11 +3,13 @@ package com.example.myapplication
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.gang.video.service.SampleChooserActivity
 import com.test.gang.lib.video.IPlayerActivity
 
 
@@ -75,6 +77,7 @@ class DownloadVideoActivity : AppCompatActivity() {
     }
 
     open fun startDownloadService() {
-
+        val intent = Intent(this, SampleChooserActivity::class.java)
+        startActivity(intent)
     }
 }

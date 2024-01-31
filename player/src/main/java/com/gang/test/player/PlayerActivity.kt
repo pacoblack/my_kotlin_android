@@ -265,11 +265,10 @@ open class PlayerActivity : Activity() {
         exoPlayPause = findViewById(R.id.exo_play_pause)
         loadingProgressBar = findViewById(R.id.loading)
         playerView = findViewById(R.id.video_view)
-
+        initOpenButton()
         playerView?.let {
             initPlayerView(it)
         }
-        initOpenButton()
     }
 
 

@@ -20,11 +20,11 @@
                   android:label="@string/application_name"
                   android:theme="@style/Theme.AppCompat"
                   android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
-            </intent-filter>
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN"/>-->
+<!--                <category android:name="android.intent.category.LAUNCHER"/>-->
+<!--                <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>-->
+<!--            </intent-filter>-->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <action android:name="androidx.media3.demo.main.action.BROWSE"/>
@@ -46,26 +46,26 @@
                   android:label="@string/application_name"
                   android:theme="@style/PlayerTheme"
                   android:exported="true">
-            <intent-filter>
-                <action android:name="androidx.media3.demo.main.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
-                <data android:scheme="content"/>
-                <data android:scheme="asset"/>
-                <data android:scheme="file"/>
-                <data android:scheme="ssai"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="androidx.media3.demo.main.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:scheme="content"/>
-                <data android:mimeType="*/*"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="androidx.media3.demo.main.action.VIEW_LIST"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
+<!--            <intent-filter>-->
+<!--                <action android:name="androidx.media3.demo.main.action.VIEW"/>-->
+<!--                <category android:name="android.intent.category.DEFAULT"/>-->
+<!--                <data android:scheme="http"/>-->
+<!--                <data android:scheme="https"/>-->
+<!--                <data android:scheme="content"/>-->
+<!--                <data android:scheme="asset"/>-->
+<!--                <data android:scheme="file"/>-->
+<!--                <data android:scheme="ssai"/>-->
+<!--            </intent-filter>-->
+<!--            <intent-filter>-->
+<!--                <action android:name="androidx.media3.demo.main.action.VIEW"/>-->
+<!--                <category android:name="android.intent.category.DEFAULT"/>-->
+<!--                <data android:scheme="content"/>-->
+<!--                <data android:mimeType="*/*"/>-->
+<!--            </intent-filter>-->
+<!--            <intent-filter>-->
+<!--                <action android:name="androidx.media3.demo.main.action.VIEW_LIST"/>-->
+<!--                <category android:name="android.intent.category.DEFAULT"/>-->
+<!--            </intent-filter>-->
         </activity>
 
         <service android:name=".DemoDownloadService"

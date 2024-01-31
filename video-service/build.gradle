@@ -3,9 +3,7 @@ plugins {
     id 'kotlin-android'
 }
 apply from: "../commons.gradle"
-apply plugin: 'com.google.android.gms.strict-version-matcher-plugin'
 
-def media3_version = '1.2.1'
 dependencies {
     implementation project(path: ':datasource')
     implementation ('androidx.media3:media3-exoplayer:1.2.1')
