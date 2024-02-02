@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.gang.video.service">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.gang.video.service"
+          tools:ignore="MissingLeanbackLauncher">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permissiohvn.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
@@ -14,7 +16,7 @@
     <uses-sdk/>
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <application android:banner="TODO">
+    <application >
         <activity android:name=".SampleChooserActivity"
                   android:configChanges="keyboardHidden"
                   android:label="@string/application_name"

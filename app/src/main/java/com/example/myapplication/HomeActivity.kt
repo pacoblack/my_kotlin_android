@@ -2,7 +2,6 @@ package com.example.myapplication
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -53,7 +52,7 @@ class HomeActivity : AppCompatActivity() {
 
     // ViewPager的Fragment适配器
     inner class ScreenSlidePagerAdapter(fa: FragmentActivity?) : FragmentStateAdapter(fa!!) {
-        @NonNull
+
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> CommonFragment.newInstance()

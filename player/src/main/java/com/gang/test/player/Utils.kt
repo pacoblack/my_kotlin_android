@@ -319,6 +319,8 @@ object Utils {
             }
             Orientation.SYSTEM -> activity.requestedOrientation =
                 ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            else -> activity.requestedOrientation =
+                ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
 

@@ -92,11 +92,9 @@ public class PlayerActivity extends AppCompatActivity
 
   @Nullable private AdsLoader clientSideAdsLoader;
 
-  @OptIn(markerClass = UnstableApi.class)
   @Nullable
   private ImaServerSideAdInsertionMediaSource.AdsLoader serverSideAdsLoader;
 
-  @OptIn(markerClass = UnstableApi.class)
   private ImaServerSideAdInsertionMediaSource.AdsLoader.State
       serverSideAdsLoaderState;
 
@@ -353,7 +351,7 @@ public class PlayerActivity extends AppCompatActivity
         finish();
         return Collections.emptyList();
       }
-      if (Util.maybeRequestReadStoragePermission(/* activity= */ this, mediaItem)) {
+      if (Util.maybeRequestReadExternalStoragePermission(/* activity= */ this, mediaItem)) {
         // The player will be reinitialized if the permission is granted.
         return Collections.emptyList();
       }

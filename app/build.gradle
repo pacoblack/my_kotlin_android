@@ -2,8 +2,6 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'WMRouter'
 
 apply from: "../commons.gradle"
@@ -26,8 +24,8 @@ dependencies {
     implementation project(':myvideo')
     implementation project(':torrent')
     implementation project(':video-service')
-    implementation rootProject.ext.dependencies.exoplayer
-    implementation rootProject.ext.dependencies.media2Exoplayer
+//    implementation rootProject.ext.dependencies.exoplayer
+//    implementation rootProject.ext.dependencies.media2Exoplayer
 
     implementation rootProject.ext.dependencies.kotlinxCoroutinesCore
     implementation project(path: ':video-service')
@@ -46,4 +44,11 @@ dependencies {
     implementation 'com.github.yangjie10930:EpMedia:v0.9.5'
 
     implementation 'com.google.android.material:material:1.6.0'
+}
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'org.jetbrains.kotlin' && details.requested.name == 'kotlin-stdlib') {
+            details.useVersion '1.8.0' // 替换成你需要统一的版本
+        }
+    }
 }
