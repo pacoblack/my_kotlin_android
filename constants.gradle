@@ -51,23 +51,23 @@ ext {
         documentfile               : "androidx.documentfile:documentfile:1.0.1",
 
         //retrofit2
-        retrofit                   : "com.squareup.retrofit2:retrofit:2.6.0",
+        retrofit                   : "com.squareup.retrofit2:retrofit:2.11.0",
         //这里用api 是为了让其他模块也可以使用gson
-        converterGson              : "com.squareup.retrofit2:converter-gson:2.4.0",
+        converterGson              : "com.squareup.retrofit2:converter-gson:2.11.0",
         //日志拦截器
-        loggingInterceptor         : "com.squareup.okhttp3:logging-interceptor:3.12.12",
+        loggingInterceptor         : "com.squareup.okhttp3:logging-interceptor:4.12.0",
 
-        rxjava                     : "io.reactivex.rxjava2:rxjava:2.2.12",
-        adapterRxjava2             : "com.squareup.retrofit2:adapter-rxjava2:2.6.0",
+        rxjava                     : "io.reactivex.rxjava2:rxjava:2.2.21",
+        adapterRxjava2             : "com.squareup.retrofit2:adapter-rxjava2:2.11.0",
         //rxjava
         rxandroid                  : "io.reactivex.rxjava2:rxandroid:2.1.1",
 
-        preference                 : "androidx.preference:preference:1.2.0",
+        preference                 : "androidx.preference:preference:1.2.1",
             
         //图片加载框架
-        glide                      : "com.github.bumptech.glide:glide:4.11.0",
-        glideCompiler              : "com.github.bumptech.glide:compiler:4.11.0",
-        okhttp3                    : "com.squareup.okhttp3:okhttp:4.9.2",
+        glide                      : "com.github.bumptech.glide:glide:4.16.0",
+        glideCompiler              : "com.github.bumptech.glide:compiler:4.16.0",
+        okhttp3                    : "com.squareup.okhttp3:okhttp:4.12.0",
 
         icu4j                      : "com.ibm.icu:icu4j:72.1",
         slf4jAndroid              : 'org.slf4j:slf4j-android:1.7.21',
