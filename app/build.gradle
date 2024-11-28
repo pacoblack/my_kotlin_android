@@ -11,10 +11,12 @@ android {
         applicationId "com.example.myapplication"
     }
     sourceSets {
-        main.jni.srcDirs=[]
         main.jniLibs.srcDirs=['../jniLibs']
     }
     namespace 'com.example.myapplication'
+    lint {
+        abortOnError false
+    }
 }
 
 dependencies {

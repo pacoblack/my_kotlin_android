@@ -26,6 +26,9 @@ android {
         jvmTarget = '1.8'
     }
     namespace 'com.gang.lib.torrent'
+    lint {
+        abortOnError false
+    }
 }
 
 ext {

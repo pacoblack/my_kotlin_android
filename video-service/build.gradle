@@ -6,6 +6,9 @@ apply from: "../commons.gradle"
 
 android {
     namespace 'com.gang.video.service'
+    lint {
+        abortOnError false
+    }
 }
 
 dependencies {

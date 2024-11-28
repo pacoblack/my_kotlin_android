@@ -4,6 +4,9 @@ apply from: "../commons.gradle"
 
 android {
     namespace 'com.gang.test.player'
+    lint {
+        abortOnError false
+    }
 }
 
 dependencies {

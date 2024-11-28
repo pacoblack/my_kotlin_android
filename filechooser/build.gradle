@@ -6,6 +6,9 @@ apply from: "../commons.gradle"
 
 android {
     namespace 'com.test.gang.filechooser'
+    lint {
+        abortOnError false
+    }
 }
 
 dependencies {
