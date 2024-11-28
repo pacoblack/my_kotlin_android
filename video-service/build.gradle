@@ -9,7 +9,7 @@ android {
 }
 
 dependencies {
-    def media3_version = "1.1.1"
+    def media3_version = '1.4.1'
 
     implementation project(path: ':datasource')
     // For media playback using ExoPlayer

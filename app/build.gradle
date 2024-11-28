@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
-apply plugin: 'WMRouter'
+//apply plugin: 'WMRouter'
 
 apply from: "../commons.gradle"
 
@@ -33,7 +33,7 @@ dependencies {
     implementation project(path: ':datasource')
 
     debugImplementation rootProject.ext.dependencies.leakcanaryAndroid
-    implementation rootProject.ext.dependencies.router
+//    implementation rootProject.ext.dependencies.router
 
     implementation rootProject.ext.dependencies.filepicker
 
