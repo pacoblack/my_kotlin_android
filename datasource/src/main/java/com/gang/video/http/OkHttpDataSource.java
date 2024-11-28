@@ -202,8 +202,12 @@ public class OkHttpDataSource extends BaseDataSource implements HttpDataSource {
         if (!response.isSuccessful()) {
             Map<String, List<String>> headers = response.headers().toMultimap();
             closeConnectionQuietly();
-            InvalidResponseCodeException exception =
-                    new InvalidResponseCodeException(responseCode, response.message(), headers, dataSpec);
+            InvalidResponseCodeException exception = null;
+            try {
+                exception = new InvalidResponseCodeException(responseCode, response.message(), new IOException(response.message()), headers, dataSpec, responseBody.bytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             if (responseCode == 416) {
                 exception.initCause(new DataSourceException(DataSourceException.POSITION_OUT_OF_RANGE));
             }

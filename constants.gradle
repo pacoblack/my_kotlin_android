@@ -5,20 +5,20 @@ ext {
     ]
 
     versions=[
-        media3_version : "1.1.1",
+        media3_version : "1.4.1",
         kotlin_version : "1.8.0",
     ]
 
     dependencies = [
-        exoplayer                  : "com.google.android.exoplayer:exoplayer:2.18.1",
-        exoplayerCore              : "com.google.android.exoplayer:exoplayer-core:2.18.1",
-        exoplayerDash              : "com.google.android.exoplayer:exoplayer-dash:2.18.1",
-        exoplayerHls               : "com.google.android.exoplayer:exoplayer-hls:2.18.1",
-        exoplayerRtsp              : "com.google.android.exoplayer:exoplayer-rtsp:2.18.1",
-        exoplayerSmoothstreaming   : "com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.1",
-        exoplayerTransformer       : "com.google.android.exoplayer:exoplayer-transformer:2.18.1",
-        exoplayerUi                : "com.google.android.exoplayer:exoplayer-ui:2.18.1",
-        extensionRtmp              : "com.google.android.exoplayer:extension-rtmp:2.18.1",//rtmp直播流解码协议
+        exoplayer                  : "com.google.android.exoplayer:exoplayer:2.19.1",
+        exoplayerCore              : "com.google.android.exoplayer:exoplayer-core:2.19.1",
+        exoplayerDash              : "com.google.android.exoplayer:exoplayer-dash:2.19.1",
+        exoplayerHls               : "com.google.android.exoplayer:exoplayer-hls:2.19.1",
+        exoplayerRtsp              : "com.google.android.exoplayer:exoplayer-rtsp:2.19.1",
+        exoplayerSmoothstreaming   : "com.google.android.exoplayer:exoplayer-smoothstreaming:2.19.1",
+        exoplayerTransformer       : "com.google.android.exoplayer:exoplayer-transformer:2.19.1",
+        exoplayerUi                : "com.google.android.exoplayer:exoplayer-ui:2.19.1",
+        extensionRtmp              : "com.google.android.exoplayer:extension-rtmp:2.19.1",//rtmp直播流解码协议
 
         media2Exoplayer            : "androidx.media2:media2-exoplayer:1.0.3",
 
@@ -43,7 +43,7 @@ ext {
         ffmpegKitHttps             : "com.arthenica:ffmpeg-kit-https:5.1.LTS",
 
         kotlinxCoroutinesCore      : "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2",
-        leakcanaryAndroid          : "com.squareup.leakcanary:leakcanary-android:2.9.1",
+        leakcanaryAndroid          : "com.squareup.leakcanary:leakcanary-android:2.14",
         router                     : "io.github.meituan-dianping:router:1.2.1",
         filepicker                 : "com.nononsenseapps:filepicker:4.2.1",
         kotlinStdlib               : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
