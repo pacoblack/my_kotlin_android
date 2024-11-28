@@ -2,6 +2,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "../commons.gradle"
 
+android {
+    namespace 'com.gang.test.player'
+}
+
 dependencies {
 
     implementation rootProject.ext.dependencies.kotlinStdlib

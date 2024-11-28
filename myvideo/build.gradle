@@ -4,6 +4,10 @@ plugins {
 }
 apply from: "../commons.gradle"
 
+android {
+    namespace 'com.test.gang.lib.video'
+}
+
 dependencies {
     implementation rootProject.ext.dependencies.kotlinStdlib
     implementation rootProject.ext.dependencies.documentfile

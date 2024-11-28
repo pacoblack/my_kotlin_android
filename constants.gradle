@@ -45,7 +45,7 @@ ext {
         kotlinxCoroutinesCore      : "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2",
         leakcanaryAndroid          : "com.squareup.leakcanary:leakcanary-android:2.9.1",
         router                     : "io.github.meituan-dianping:router:1.2.1",
-        filepicker                 : "com.nononsenseapps:filepicker:4.1.0",
+        filepicker                 : "com.nononsenseapps:filepicker:4.2.1",
         kotlinStdlib               : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
         checkerQual                : "org.checkerframework:checker-qual:3.13.0",
         documentfile               : "androidx.documentfile:documentfile:1.0.1",

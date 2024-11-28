@@ -4,6 +4,10 @@ plugins {
 }
 apply from: "../commons.gradle"
 
+android {
+    namespace 'com.gang.video.http'
+}
+
 dependencies {
     implementation project(':network')
     compileOnly rootProject.ext.dependencies.checkerQual

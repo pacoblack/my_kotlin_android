@@ -4,6 +4,10 @@ plugins {
 }
 apply from: "../commons.gradle"
 
+android {
+    namespace 'com.test.gang.filechooser'
+}
+
 dependencies {
 
     implementation rootProject.ext.dependencies.kotlinStdlib
