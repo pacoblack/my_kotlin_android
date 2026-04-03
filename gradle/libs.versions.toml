@@ -6,7 +6,8 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
-kotlin = "2.3.20"
+kotlin = "2.2.21"
+ksp = "2.2.21-2.0.4"
 composeBom = "2026.03.01"
 minSdk = "24"
 targetSdk = "36"
@@ -88,5 +89,6 @@ glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.3.4" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
