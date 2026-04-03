@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.find.gang.myfindapplication.ui.home.HomeFragment"
+        android:name="com.find.gang.app.ui.home.HomeFragment"
         android:label="首页"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/webViewFragment"
-        android:name="com.find.gang.myfindapplication.ui.webview.WebViewFragment"
+        android:name="com.find.gang.app.ui.webview.WebViewFragment"
         android:label="WebView"
         tools:layout="@layout/fragment_webview" />
 
     <fragment
         android:id="@+id/videoPlayerFragment"
-        android:name="com.find.gang.myfindapplication.ui.video.VideoPlayerFragment"
+        android:name="com.find.gang.app.ui.video.VideoPlayerFragment"
         android:label="视频播放"
         tools:layout="@layout/fragment_video_player" />
 

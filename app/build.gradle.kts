@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.find.gang.myfindapplication"
+    namespace = "com.find.gang.app"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -13,7 +13,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.find.gang.myfindapplication"
+        applicationId = "com.find.gang.app"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
