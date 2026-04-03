@@ -1,16 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.android)
+//    kotlin("android")
+
+//    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.find.gang.app"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.find.gang.app"
@@ -23,6 +21,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            isShrinkResources = false  // 确保资源压缩也关闭
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -32,8 +38,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        }
+    }
+    composeOptions {
+        // 关键：指定 Compose 编译器扩展版本，必须与 Compose BOM 版本匹配
+        kotlinCompilerExtensionVersion = "1.5.11"   // 以 Compose BOM 2024.11.00 为例
     }
     buildFeatures {
         compose = true
@@ -44,7 +59,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.constraintlayout)
@@ -74,7 +88,7 @@ dependencies {
 
     // ARouter
     implementation(libs.arouter.api)
-    ksp(libs.arouter.compiler)
+//    ksp(libs.arouter.compiler)
 
     // 网络请求
     implementation(libs.okhttp)
@@ -99,5 +113,5 @@ dependencies {
 
     // Glide
     implementation(libs.glide)
-    ksp(libs.glide.compiler)
+//    ksp(libs.glide.compiler)
 }

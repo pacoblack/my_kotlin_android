@@ -1,35 +1,43 @@
 [versions]
-agp = "9.1.0"
-coreKtx = "1.18.0"
+agp = "8.13.2"
+coreKtx = "1.15.0"  # 降低版本以兼容API 35
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
-lifecycleRuntimeKtx = "2.10.0"
-activityCompose = "1.13.0"
-kotlin = "2.2.21"
-ksp = "2.2.21-2.0.4"
-composeBom = "2026.03.01"
+lifecycleRuntimeKtx = "2.8.0"  # 降低版本
+activityCompose = "1.9.0"  # 与较低API兼容
+kotlin = "1.9.23"
+ksp = "1.9.23-1.0.20"
+composeBom = "2024.04.01"  # 重要：大幅降低此版本
 minSdk = "24"
-targetSdk = "36"
-appcompat = "1.7.1"
-material = "1.13.0"
-constraintlayout = "2.2.1"
-lifecycle = "2.10.0"
-fragment-ktx = "1.8.9"
-navigation = "2.9.7"
+multidex = "2.0.1"
+targetSdk = "35"
+compileSdk = "35"
+appcompat = "1.6.1"  # 降低版本
+material = "1.12.0"  # 降低版本
+constraintlayout = "2.1.4"  # 更稳定版本
+lifecycle = "2.8.0"  # 降低版本
+fragment-ktx = "1.7.1"  # 降低版本
+navigation = "2.7.7"  # 降低版本
 arouter-api = "1.5.2"
 arouter-compiler = "1.5.2"
-okhttp = "5.3.2"
-retrofit = "3.0.0"
-gson = "2.13.2"
-rxjava3 = "3.1.12"
+okhttp = "4.12.0"  # 降低版本
+retrofit = "2.9.0"  # 降低版本
+gson = "2.10.1"  # 降低版本
+rxjava3 = "3.1.8"  # 降低版本
 rxandroid3 = "3.0.2"
 rxkotlin3 = "3.0.1"
-media3 = "1.10.0"
-glide = "5.0.5"
+media3 = "1.4.1"  # 降低版本
+glide = "4.16.0"  # 降低版本
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -87,8 +95,3 @@ media3-session = { module = "androidx.media3:media3-session", version.ref = "med
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 
-[plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
