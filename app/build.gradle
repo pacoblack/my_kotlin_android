@@ -21,25 +21,16 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-//    implementation project(':cmakelibrary')
-//    implementation project(':videolibrary')
+
     implementation project(':network')
-    implementation project(':myvideo')
-    implementation project(':torrent')
-    implementation project(':video-service')
-//    implementation rootProject.ext.dependencies.exoplayer
-//    implementation rootProject.ext.dependencies.media2Exoplayer
 
     implementation rootProject.ext.dependencies.kotlinxCoroutinesCore
-    implementation project(path: ':video-service')
-    implementation project(path: ':datasource')
 
     debugImplementation rootProject.ext.dependencies.leakcanaryAndroid
-//    implementation rootProject.ext.dependencies.router
 
     implementation rootProject.ext.dependencies.filepicker
 
-    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'com.google.android.material:material:1.13.0'
 }
 configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->

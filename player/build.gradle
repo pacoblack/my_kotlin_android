@@ -16,7 +16,6 @@ dependencies {
 
 //    implementation project(':videolibrary')
     implementation project(':network')
-    implementation project(':filechooser')
     implementation fileTree(dir: "libs", include: ["lib-*.aar"])
     implementation rootProject.ext.dependencies.ffmpegKitHttps
     implementation rootProject.ext.dependencies.icu4j
