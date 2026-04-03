@@ -23,7 +23,7 @@ class HomeViewModel : BaseViewModel() {
             .subscribe({ response ->
                 setLoading(false)
                 if (response.code == 0) {
-                    val articleList: List<ArticleItem> = response.data as List<ArticleItem>
+                    response.data as List<ArticleItem>
                     _articleList.value = response.data.map { article ->
                         ArticleItem(
                             title = article.title,
