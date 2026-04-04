@@ -3,6 +3,7 @@ package com.find.gang.app.ui.video
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -44,10 +45,9 @@ class VideoPlayerFragment : BaseFragment<FragmentVideoPlayerBinding, VideoPlayer
     }
 
     // 权限请求
-    private val permissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
+    private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+        val allGranted = result.values.all { it }
+        if (allGranted) {
             openFilePicker()
         } else {
             showToast("需要存储权限才能选择本地视频")
@@ -135,16 +135,16 @@ class VideoPlayerFragment : BaseFragment<FragmentVideoPlayerBinding, VideoPlayer
     }
 
     private fun checkPermissionAndOpenPicker() {
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                openFilePicker()
-            }
-            else -> {
-                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
+        val permissionsToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arrayOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO)
+        } else {
+            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+
+        if (permissionsToRequest.all { ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED }) {
+            openFilePicker()
+        } else {
+            permissionLauncher.launch(permissionsToRequest)
         }
     }
 
