@@ -25,9 +25,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyFindApplication">
         <activity
-            android:name="com.find.gang.app.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.MyFindApplication">
+        </activity>
+        <activity android:name="com.find.gang.app.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MyFindApplication" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

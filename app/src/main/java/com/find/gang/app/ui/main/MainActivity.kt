@@ -1,15 +1,13 @@
-package com.find.gang.app
+package com.find.gang.app.ui.main
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.find.gang.app.R
+import com.find.gang.app.base.BaseActivity
 import com.find.gang.app.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMainBinding
+class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.activity_main) {
 
     private val navController: NavController by lazy {
         val navHostFragment = supportFragmentManager
@@ -17,12 +15,15 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.navController
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun getViewModelClass(): Class<MainViewModel> = MainViewModel::class.java
 
+    override fun initView() {
+        super.initView()
         binding.bottomNavView.setupWithNavController(navController)
+    }
+
+    override fun observeData() {
+        super.observeData()
     }
 
     // 处理返回按钮事件

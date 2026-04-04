@@ -1,29 +1,39 @@
 package com.find.gang.app.toolbox
 
-import android.Manifest
-import android.os.Build
 import androidx.fragment.app.FragmentActivity
 import com.permissionx.guolindev.PermissionX
-import com.permissionx.guolindev.request.PermissionBuilder
 
 object PermissionTools {
-    fun requestStorage(activity: FragmentActivity, allowCallback: Callback<Void, Void>, deniCallback: Callback<List<String>, Void>){
-        var builder: PermissionBuilder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            PermissionX.init(activity)
-                .permissions(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
-
-        } else {
-            PermissionX.init(activity)
-                .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    /**
+     * 通用权限请求方法
+     * @param activity FragmentActivity
+     * @param permissions 需要申请的权限列表
+     * @param onAllGranted 全部授权成功回调
+     * @param onDenied 有权限被拒绝时的回调，返回被拒绝的权限列表
+     */
+    fun requestPermissions(
+        activity: FragmentActivity,
+        permissions: List<String>,
+        onAllGranted: () -> Unit,
+        onDenied: (List<String>) -> Unit
+    ) {
+        if (permissions.isEmpty()) {
+            onAllGranted()
+            return
         }
-        builder.onExplainRequestReason { scope, deniedList ->
-            scope.showRequestReasonDialog(deniedList, "请求存储权限", "OK", "Cancel")
-        }
-            .request { allGranted, grantedList, deniedList ->
+        PermissionX.init(activity)
+            .permissions(permissions)
+            .onExplainRequestReason { scope, deniedList ->
+                scope.showRequestReasonDialog(deniedList, "需要相关权限才能使用此功能", "确定", "取消")
+            }
+            .onForwardToSettings { scope, deniedList ->
+                scope.showForwardToSettingsDialog(deniedList, "请前往设置中手动开启权限", "去设置", "取消")
+            }
+            .request { allGranted, _, deniedList ->
                 if (allGranted) {
-                    allowCallback.call(null)
+                    onAllGranted()
                 } else {
-                    deniCallback.call(deniedList)
+                    onDenied(deniedList)
                 }
             }
     }
