@@ -6,15 +6,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@android:color/black">
+        android:background="@color/white">
 
         <!-- 视频输入区域 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:background="#333333">
+            android:padding="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -24,21 +23,22 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:orientation="horizontal"
+                android:padding="8dp">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
                     android:id="@+id/et_network_url"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:hint="输入网络视频地址"
-                    android:textColorHint="#CCCCCC"
-                    android:textColor="@android:color/white" />
+                    android:inputType="textUri"
+                    android:padding="12dp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

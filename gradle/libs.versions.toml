@@ -11,6 +11,7 @@ ksp = "1.9.23-1.0.20"
 composeBom = "2024.04.01"  # 重要：大幅降低此版本
 minSdk = "24"
 multidex = "2.0.1"
+permissionx = "1.8.1"
 targetSdk = "35"
 compileSdk = "35"
 appcompat = "1.6.1"  # 降低版本
@@ -95,3 +96,5 @@ media3-session = { module = "androidx.media3:media3-session", version.ref = "med
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 
+# 权限
+permissionx = { module = "com.guolindev.permissionx:permissionx", version.ref = "permissionx" }

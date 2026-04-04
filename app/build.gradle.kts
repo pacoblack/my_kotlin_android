@@ -114,4 +114,6 @@ dependencies {
     // Glide
     implementation(libs.glide)
 //    ksp(libs.glide.compiler)
+
+    implementation(libs.permissionx)
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@id/homeFragment"
+        android:title="首页"
+        android:icon="@drawable/ic_home" />
+    <item
+        android:id="@id/webViewFragment"
+        android:title="网页"
+        android:icon="@drawable/ic_web" />
+    <item
+        android:id="@id/videoPlayerFragment"
+        android:title="视频"
+        android:icon="@drawable/ic_player" />
+</menu>

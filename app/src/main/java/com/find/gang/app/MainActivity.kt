@@ -2,29 +2,31 @@ package com.find.gang.app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.find.gang.app.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private val navController: NavController by lazy {
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navHostFragment.navController
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 设置 ActionBar 与 Navigation 联动
-        val navController = binding.navHostFragment.findNavController()
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        binding.bottomNavView.setupWithNavController(navController)
     }
 
     // 处理返回按钮事件
     override fun onSupportNavigateUp(): Boolean {
-        val navController = binding.navHostFragment.findNavController()
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }
