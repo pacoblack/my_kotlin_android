@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -20,6 +21,9 @@ import com.find.gang.app.R
 import com.find.gang.app.base.BaseFragment
 import com.find.gang.app.databinding.FragmentVideoPlayerBinding
 import com.find.gang.app.router.RouterPath
+import com.find.gang.app.toolbox.Callback2
+import com.find.gang.app.toolbox.PermissionTools
+import com.find.gang.app.ui.EditVideoActivity
 
 @Route(path = RouterPath.VIDEO_PLAYER)
 class VideoPlayerFragment : BaseFragment<FragmentVideoPlayerBinding, VideoPlayerViewModel>(R.layout.fragment_video_player) {
@@ -39,6 +43,7 @@ class VideoPlayerFragment : BaseFragment<FragmentVideoPlayerBinding, VideoPlayer
     private val filePickerLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
+        videoUrl = uri.toString()
         uri?.let {
             playVideo(it, isLocal = true)
         }
@@ -102,14 +107,36 @@ class VideoPlayerFragment : BaseFragment<FragmentVideoPlayerBinding, VideoPlayer
         }
 
         binding.btnSelectLocal.setOnClickListener {
-            checkPermissionAndOpenPicker()
+            PermissionTools.checkPermissions(requireContext(), object :
+                Callback2<String, Boolean, Array<String>> {
+
+                    override fun onSuccess(p: String?): Boolean {
+                        openFilePicker()
+                        return true
+                    }
+
+                    override fun onError(t: Array<String>?): Boolean {
+                        permissionLauncher.launch(t)
+                        return true
+                    }
+                })
+        }
+
+        binding.btnEditLocal.setOnClickListener {
+            activity?.let { it1 ->
+                if (videoUrl.isNullOrEmpty()) {
+                    showToast("请先选择视频：" + videoUrl)
+                } else {
+                    EditVideoActivity.startActivity(it1, videoUrl!!)
+                }
+            }
         }
     }
 
     private fun handleIncomingVideo() {
         videoUrl?.let { url ->
             if (isLocal) {
-                playVideo(Uri.parse(url), isLocal = true)
+                playVideo(url.toUri(), isLocal = true)
             } else {
                 binding.etNetworkUrl.setText(url)
                 playNetworkVideo(url)
@@ -119,7 +146,7 @@ class VideoPlayerFragment : BaseFragment<FragmentVideoPlayerBinding, VideoPlayer
 
     private fun playNetworkVideo(url: String) {
         val fullUrl = if (url.startsWith("http")) url else "https://$url"
-        val mediaItem = MediaItem.fromUri(Uri.parse(fullUrl))
+        val mediaItem = MediaItem.fromUri(fullUrl.toUri())
         exoPlayer?.setMediaItem(mediaItem)
         exoPlayer?.prepare()
         exoPlayer?.play()

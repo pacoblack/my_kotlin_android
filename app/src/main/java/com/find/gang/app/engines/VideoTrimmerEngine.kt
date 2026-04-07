@@ -1,5 +1,6 @@
 package com.find.gang.app.engines
 
+import android.content.Context
 import android.media.MediaCodec
 import android.media.MediaExtractor
 import android.media.MediaFormat
@@ -31,12 +32,17 @@ object VideoTrimmerEngine {
      * @param endUs   结束时间（微秒）
      * @return 成功返回 true
      */
-    fun trimVideo(srcPath: String, dstPath: String, startUs: Long, endUs: Long): Boolean {
+    fun trimVideo(context: Context, srcPath: String, dstPath: String, startUs: Long, endUs: Long): Boolean {
         var extractor: MediaExtractor? = null
         var muxer: MediaMuxer? = null
         try {
             extractor = MediaExtractor()
-            extractor.setDataSource(srcPath)
+            try {
+                extractor.setDataSource(srcPath)
+            } catch (e: IOException) {
+                android.widget.Toast.makeText(context, "无效的视频源: $srcPath", android.widget.Toast.LENGTH_SHORT).show()
+                return false
+            }
             muxer = MediaMuxer(dstPath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
 
             val trackCount = extractor.trackCount
