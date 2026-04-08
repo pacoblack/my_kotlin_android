@@ -19,6 +19,7 @@ import com.find.gang.app.databinding.ViewTimelineVideoBinding
 import kotlinx.coroutines.*
 import java.io.File
 import androidx.core.graphics.scale
+import androidx.core.net.toUri
 
 /**
  * 视频缩略图时间轴组件
@@ -108,7 +109,7 @@ class VideoTimelineView @JvmOverloads constructor(
         var retriever: MediaMetadataRetriever? = null
         return try {
             retriever = MediaMetadataRetriever()
-            retriever.setDataSource(path)
+            retriever.setDataSource(context, path.toUri())
             val durationStr = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
             durationStr?.toLong() ?: 0L
         } catch (e: Exception) {
@@ -195,6 +196,8 @@ class VideoTimelineView @JvmOverloads constructor(
         private var selectedPosition: Int = 0
         var onThumbnailClickListener: ((Long, Int) -> Unit)? = null
 
+        lateinit var binding : ItemTimelineThumbnailBinding
+
         private fun generateFrameTimes(): List<Long> {
             val times = mutableListOf<Long>()
             var currentTime = 0L
@@ -209,7 +212,7 @@ class VideoTimelineView @JvmOverloads constructor(
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val binding = ItemTimelineThumbnailBinding.inflate(
+            binding = ItemTimelineThumbnailBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
             return ViewHolder(binding)
@@ -220,6 +223,7 @@ class VideoTimelineView @JvmOverloads constructor(
 
             // 加载缩略图
             ThumbnailLoader.loadThumbnail(
+                context = binding.root.context,
                 videoPath = videoPath,
                 timeMs = timeMs,
                 targetWidth = targetWidth,
@@ -294,6 +298,7 @@ class VideoTimelineView @JvmOverloads constructor(
         private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
         fun loadThumbnail(
+            context: Context,
             videoPath: String,
             timeMs: Long,
             targetWidth: Int,
@@ -307,7 +312,7 @@ class VideoTimelineView @JvmOverloads constructor(
             }
 
             scope.launch {
-                val bitmap = loadFromDiskOrGenerate(videoPath, timeMs, targetWidth, targetHeight, cacheKey)
+                val bitmap = loadFromDiskOrGenerate(context, videoPath, timeMs, targetWidth, targetHeight, cacheKey)
                 withContext(Dispatchers.Main) {
                     onResult(bitmap)
                 }
@@ -315,6 +320,7 @@ class VideoTimelineView @JvmOverloads constructor(
         }
 
         private suspend fun loadFromDiskOrGenerate(
+            context: Context,
             videoPath: String,
             timeMs: Long,
             targetWidth: Int,
@@ -327,7 +333,7 @@ class VideoTimelineView @JvmOverloads constructor(
                     memoryCache.put(cacheKey, it)
                 }
             } else {
-                generateThumbnail(videoPath, timeMs, targetWidth, targetHeight)?.also {
+                generateThumbnail(context, videoPath, timeMs, targetWidth, targetHeight)?.also {
                     saveToDisk(diskFile, it)
                     memoryCache.put(cacheKey, it)
                 }
@@ -335,6 +341,7 @@ class VideoTimelineView @JvmOverloads constructor(
         }
 
         private fun generateThumbnail(
+            context: Context,
             videoPath: String,
             timeMs: Long,
             targetWidth: Int,
@@ -343,7 +350,7 @@ class VideoTimelineView @JvmOverloads constructor(
             var retriever: MediaMetadataRetriever? = null
             return try {
                 retriever = MediaMetadataRetriever()
-                retriever.setDataSource(videoPath)
+                retriever.setDataSource(context, videoPath.toUri())
                 val frame = retriever.getFrameAtTime(timeMs * 1000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
                 frame?.scale(targetWidth, targetHeight)
             } catch (e: Exception) {
