@@ -31,7 +31,7 @@ class EditVideoActivity : AppCompatActivity(), OnRangeChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityVideoEditBinding.inflate(layoutInflater)
-
+        setContentView(binding.root)
         // 创建输出目录（应用私有目录）
         parseParams()
         outputDir = getExternalFilesDir(null).toString() + "/trimmed/"

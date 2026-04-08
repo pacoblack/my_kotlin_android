@@ -40,7 +40,7 @@ object VideoTrimmerEngine {
             try {
                 extractor.setDataSource(srcPath)
             } catch (e: IOException) {
-                android.widget.Toast.makeText(context, "无效的视频源: $srcPath", android.widget.Toast.LENGTH_SHORT).show()
+                println("无效的视频源: $srcPath")
                 return false
             }
             muxer = MediaMuxer(dstPath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)

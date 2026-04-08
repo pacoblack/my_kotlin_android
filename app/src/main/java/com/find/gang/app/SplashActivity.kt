@@ -18,7 +18,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         // 初始化 DataBinding
         binding = ActivitySplashBinding.inflate(layoutInflater)
-
+        setContentView(binding.root)
         this.checkAndRequestPermissions()
     }
 
