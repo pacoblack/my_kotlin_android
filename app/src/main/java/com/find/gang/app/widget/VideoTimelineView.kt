@@ -55,7 +55,7 @@ class VideoTimelineView @JvmOverloads constructor(
     // 视频信息
     private var videoPath: String = ""
     private var totalDurationMs: Long = 0L
-    private var frameIntervalMs: Long = 10000L  // 默认10秒
+    private var frameIntervalMs: Long = 1000L  // 默认10秒
 
     // 缩略图尺寸（在第一次布局时计算）
     private var thumbnailWidth = 0
@@ -84,7 +84,7 @@ class VideoTimelineView @JvmOverloads constructor(
      * @param intervalMs 截图间隔（毫秒），默认10秒
      * @param onReady 时间轴准备就绪回调（可选）
      */
-    fun setVideoPath(path: String, intervalMs: Long = 10000L, onReady: (() -> Unit)? = null) {
+    fun setVideoPath(path: String, intervalMs: Long = 1000L, onReady: (() -> Unit)? = null) {
         this.videoPath = path
         this.frameIntervalMs = intervalMs
 

@@ -59,27 +59,28 @@ class EditVideoActivity : AppCompatActivity(), OnRangeChangeListener {
 
     fun initTimelineView(){
         // 初始化组件缓存（建议在 Application 中只调用一次）
-        VideoTimelineView.initCache(applicationContext)
-
-        // 设置视频路径（间隔10秒）
-        binding.rangeSeekBar.setVideoPath(srcVideoUri, 10000L) {
-            // 可选：时间轴准备就绪后的操作
-        }
-
-        // 设置点击跳转回调
-        binding.rangeSeekBar.setOnThumbnailClickListener { timeMs, position ->
-            binding.videoView.seekTo(timeMs.toInt())
-        }
-
-        // 定时同步进度（例如每秒调用一次）
-        lifecycleScope.launch(Dispatchers.Main) {
-            while (true) {
-                delay(500)
-                binding.rangeSeekBar.setCurrentPosition(binding.videoView.currentPosition)
-                // 可选：自动滚动到当前位置
-                binding.rangeSeekBar.scrollToCurrentPosition(smooth = true)
-            }
-        }
+        binding.rangeSeekBar.setOnRangeChangeListener(this)
+//        VideoTimelineView.initCache(applicationContext)
+//
+//        // 设置视频路径（间隔10秒）
+//        binding.rangeSeekBar.setVideoPath(srcVideoUri) {
+//            // 可选：时间轴准备就绪后的操作
+//        }
+//
+//        // 设置点击跳转回调
+//        binding.rangeSeekBar.setOnThumbnailClickListener { timeMs, position ->
+//            binding.videoView.seekTo(timeMs.toInt())
+//        }
+//
+//        // 定时同步进度（例如每秒调用一次）
+//        lifecycleScope.launch(Dispatchers.Main) {
+//            while (true) {
+//                delay(500)
+//                binding.rangeSeekBar.setCurrentPosition(binding.videoView.currentPosition)
+//                // 可选：自动滚动到当前位置
+//                binding.rangeSeekBar.scrollToCurrentPosition(smooth = true)
+//            }
+//        }
     }
 
     private fun parseParams(){
@@ -98,12 +99,13 @@ class EditVideoActivity : AppCompatActivity(), OnRangeChangeListener {
             isPrepared = true
             val durationMs = binding.videoView.getDuration()
             videoDurationUs = durationMs * 1000L
+            binding.rangeSeekBar.setDuration(videoDurationUs)
             // 默认选取整个视频
             trimStartUs = 0
             trimEndUs = videoDurationUs
             // 开始播放并循环
-            binding.videoView.start()
-            mp.isLooping = true
+//            binding.videoView.start()
+//            mp.isLooping = true
         }
         binding.videoView.setOnErrorListener { mp: MediaPlayer?, what: Int, extra: Int ->
             Toast.makeText(this, "视频播放错误", Toast.LENGTH_SHORT).show()
@@ -186,7 +188,7 @@ class EditVideoActivity : AppCompatActivity(), OnRangeChangeListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.rangeSeekBar.release()
+//        binding.rangeSeekBar.release()
     }
 
     companion object {
