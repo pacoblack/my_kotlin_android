@@ -25,3 +25,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "My Find Application"
 include(":app")
+include(":trim-video")

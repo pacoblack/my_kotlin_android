@@ -1,9 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-//    kotlin("android")
-
-//    alias(libs.plugins.ksp)
 }
 
 android {
@@ -117,4 +114,6 @@ dependencies {
 //    ksp(libs.glide.compiler)
 
     implementation(libs.permissionx)
+
+    implementation(project(":trim-video"))
 }
