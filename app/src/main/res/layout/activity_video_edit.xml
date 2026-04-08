@@ -11,11 +11,16 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <com.find.gang.app.widget.VideoRangeSeekBar
+    <com.find.gang.app.widget.VideoTimelineView
         android:id="@+id/rangeSeekBar"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"/>
+<!--    <com.find.gang.app.widget.VideoRangeSeekBar-->
+<!--        android:id="@+id/rangeSeekBar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:layout_marginTop="20dp" />-->
 
     <LinearLayout
         android:layout_width="match_parent"

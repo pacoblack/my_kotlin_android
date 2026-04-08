@@ -12,7 +12,6 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:scrollbars="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:orientation="horizontal" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </merge>

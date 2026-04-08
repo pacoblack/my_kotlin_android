@@ -11,9 +11,14 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import com.find.gang.app.databinding.ActivityVideoEditBinding
 import com.find.gang.app.engines.VideoTrimmerEngine.trimVideo
 import com.find.gang.app.widget.VideoRangeSeekBar.OnRangeChangeListener
+import com.find.gang.app.widget.VideoTimelineView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 
 
@@ -39,7 +44,7 @@ class EditVideoActivity : AppCompatActivity(), OnRangeChangeListener {
 
         loadVideo()
 
-        binding.rangeSeekBar.setOnRangeChangeListener(this)
+        initTimelineView()
 
         binding.btnTrim.setOnClickListener { _: View? ->
             if (isPrepared) {
@@ -50,6 +55,31 @@ class EditVideoActivity : AppCompatActivity(), OnRangeChangeListener {
 
         binding.btnSaveAsNew.setOnClickListener { v: View? -> startTrim(false) }
         binding.btnOverwrite.setOnClickListener { v: View? -> startTrim(true) }
+    }
+
+    fun initTimelineView(){
+        // 初始化组件缓存（建议在 Application 中只调用一次）
+        VideoTimelineView.initCache(applicationContext)
+
+        // 设置视频路径（间隔10秒）
+        binding.rangeSeekBar.setVideoPath(srcVideoUri, 10000L) {
+            // 可选：时间轴准备就绪后的操作
+        }
+
+        // 设置点击跳转回调
+        binding.rangeSeekBar.setOnThumbnailClickListener { timeMs, position ->
+            binding.videoView.seekTo(timeMs.toInt())
+        }
+
+        // 定时同步进度（例如每秒调用一次）
+        lifecycleScope.launch(Dispatchers.Main) {
+            while (true) {
+                delay(500)
+                binding.rangeSeekBar.setCurrentPosition(binding.videoView.currentPosition)
+                // 可选：自动滚动到当前位置
+                binding.rangeSeekBar.scrollToCurrentPosition(smooth = true)
+            }
+        }
     }
 
     private fun parseParams(){
@@ -68,7 +98,6 @@ class EditVideoActivity : AppCompatActivity(), OnRangeChangeListener {
             isPrepared = true
             val durationMs = binding.videoView.getDuration()
             videoDurationUs = durationMs * 1000L
-            binding.rangeSeekBar.setDuration(videoDurationUs)
             // 默认选取整个视频
             trimStartUs = 0
             trimEndUs = videoDurationUs
@@ -153,6 +182,11 @@ class EditVideoActivity : AppCompatActivity(), OnRangeChangeListener {
                 Toast.makeText(this, "需要存储权限", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.rangeSeekBar.release()
     }
 
     companion object {

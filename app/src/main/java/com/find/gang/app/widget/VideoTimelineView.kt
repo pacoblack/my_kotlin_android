@@ -75,6 +75,7 @@ class VideoTimelineView @JvmOverloads constructor(
         // 加载布局（需要先创建布局文件 timeline_view.xml）
         binding = ViewTimelineVideoBinding.inflate(LayoutInflater.from(context), this)
         binding.timelineRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView = binding.timelineRecyclerView
     }
 
     /**
@@ -150,7 +151,7 @@ class VideoTimelineView @JvmOverloads constructor(
     /**
      * 更新当前播放进度（用于高亮对应缩略图）
      */
-    fun setCurrentPosition(positionMs: Long) {
+    fun setCurrentPosition(positionMs: Int) {
         adapter?.updateCurrentProgress(positionMs)
     }
 
@@ -251,7 +252,7 @@ class VideoTimelineView @JvmOverloads constructor(
             notifyItemChanged(selectedPosition)
         }
 
-        fun updateCurrentProgress(currentPositionMs: Long) {
+        fun updateCurrentProgress(currentPositionMs: Int) {
             if (frameTimes.isEmpty()) return
             var newPos = 0
             for (i in frameTimes.indices) {
