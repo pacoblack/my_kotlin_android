@@ -15,34 +15,35 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.OptIn
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.Player
+import androidx.media3.common.VideoSize
+import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.find.gang.video.lib.databinding.VideoTrimmerViewBinding
 import com.find.gang.video.lib.interfaces.IVideoTrimmerView
+import com.find.gang.video.lib.interfaces.VideoTrimListener
+import com.find.gang.video.lib.toolbox.VideoTrimmerUtil
 import com.find.gang.video.lib.toolbox.VideoTrimmerUtil.MAX_COUNT_RANGE
 import com.find.gang.video.lib.toolbox.VideoTrimmerUtil.MAX_SHOOT_DURATION
 import com.find.gang.video.lib.toolbox.VideoTrimmerUtil.RECYCLER_VIEW_PADDING
+import com.find.gang.video.lib.toolbox.VideoTrimmerUtil.THUMB_WIDTH
 import com.find.gang.video.lib.toolbox.VideoTrimmerUtil.VIDEO_FRAMES_WIDTH
-import com.find.gang.video.lib.widget.LVideoView
+import com.find.gang.video.lib.trim.VideoTrimmerAdapter
 import com.find.gang.video.lib.widget.RangeSeekBarView
+import com.find.gang.video.lib.widget.SpacesItemDecoration2
 import java.lang.String
 import kotlin.Boolean
-import kotlin.Float
 import kotlin.Int
 import kotlin.Long
-import kotlin.collections.plus
-import kotlin.compareTo
-import kotlin.div
+import kotlin.apply
 import kotlin.math.abs
-import kotlin.plus
-import kotlin.sequences.plus
 import kotlin.text.trim
-import kotlin.times
-import kotlin.unaryMinus
+import androidx.core.view.isGone
+import androidx.media3.common.util.UnstableApi
 
 class VideoTrimmerView @JvmOverloads constructor(
     context: Context,
@@ -52,21 +53,15 @@ class VideoTrimmerView @JvmOverloads constructor(
 
     private lateinit var binding: VideoTrimmerViewBinding
     private val mMaxWidth: Int = VIDEO_FRAMES_WIDTH
-    private var mContext: Context? = null
-    private var mLinearVideo: RelativeLayout? = null
-    private var mVideoView: LVideoView? = null
-    private var mPlayView: ImageView? = null
-    private var mVideoThumbRecyclerView: RecyclerView? = null
-    private var mRangeSeekBarView: RangeSeekBarView? = null
-    private var mSeekBarLayout: LinearLayout? = null
-    private var mRedProgressIcon: ImageView? = null
-    private var mVideoShootTipTv: TextView? = null
+    private lateinit var mVideoPlayer: ExoPlayer
+    private lateinit var mVideoThumbRecyclerView: RecyclerView
+    private lateinit var mRangeSeekBarView: RangeSeekBarView
+    private lateinit var mRedProgressIcon: ImageView
     private var mAverageMsPx = 0f //每毫秒所占的px
     private var averagePxMs = 0f //每px所占用的ms毫秒
     private var mSourceUri: Uri? = null
     private var mOnTrimVideoListener: VideoTrimListener? = null
-    private var mDuration = 0
-    private var mVideoThumbAdapter: VideoTrimmerAdapter? = null
+    private var mDuration:Long = 0
     private var restoreState = false
 
     //new
@@ -83,58 +78,51 @@ class VideoTrimmerView @JvmOverloads constructor(
     private val mAnimationHandler = Handler(Looper.myLooper()!!)
 
     private fun init(context: Context) {
-        this.mContext = context
         binding = VideoTrimmerViewBinding.inflate(LayoutInflater.from(context), this, false)
         LayoutInflater.from(context).inflate(R.layout.video_trimmer_view, this, true)
-
-        mLinearVideo = binding.layoutSurfaceView
-        mVideoView = binding.videoLoader
-        mPlayView = binding.iconVideoPlay
-        mSeekBarLayout = binding.seekBarLayout
+        setupPlayer()
         mRedProgressIcon = binding.positionIcon
-        mVideoShootTipTv = binding.videoShootTip
         mVideoThumbRecyclerView = binding.videoFramesRecyclerView
-        mVideoThumbRecyclerView!!.setLayoutManager(
+        mVideoThumbRecyclerView.setLayoutManager(
             LinearLayoutManager(
-                mContext,
+                context,
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
         )
-        mVideoThumbAdapter = VideoTrimmerAdapter(mContext)
-        mVideoThumbRecyclerView!!.setAdapter(mVideoThumbAdapter)
-        mVideoThumbRecyclerView!!.addOnScrollListener(mOnScrollListener)
+        mVideoThumbRecyclerView.setAdapter(VideoTrimmerAdapter(context))
+        mVideoThumbRecyclerView.addOnScrollListener(mOnScrollListener)
         setUpListeners()
     }
 
     private fun initRangeSeekBarView() {
-        if (mRangeSeekBarView != null) return
+        if (::mRangeSeekBarView.isInitialized) return
         mLeftProgressPos = 0
         if (mDuration <= MAX_SHOOT_DURATION) {
             mThumbsTotalCount = MAX_COUNT_RANGE
-            mRightProgressPos = mDuration.toLong()
+            mRightProgressPos = mDuration
         } else {
             mThumbsTotalCount =
-                (mDuration * 1.0f / (MAX_SHOOT_DURATION * 1.0f) * MAX_COUNT_RANGE) as Int
+                (mDuration * 1.0f / (MAX_SHOOT_DURATION * 1.0f) * MAX_COUNT_RANGE).toInt()
             mRightProgressPos = MAX_SHOOT_DURATION
         }
-        mVideoThumbRecyclerView!!.addItemDecoration(
+        mVideoThumbRecyclerView.addItemDecoration(
             SpacesItemDecoration2(
                 RECYCLER_VIEW_PADDING,
                 mThumbsTotalCount
             )
         )
-        mRangeSeekBarView = RangeSeekBarView(mContext, mLeftProgressPos, mRightProgressPos)
-        mRangeSeekBarView!!.selectedMinValue = mLeftProgressPos
-        mRangeSeekBarView!!.selectedMaxValue = mRightProgressPos
-        mRangeSeekBarView!!.setStartEndTime(mLeftProgressPos, mRightProgressPos)
-        mRangeSeekBarView!!.setMinShootTime(VideoTrimmerUtil.MIN_SHOOT_DURATION)
-        mRangeSeekBarView!!.isNotifyWhileDragging = true
-        mRangeSeekBarView!!.setOnRangeSeekBarChangeListener(mOnRangeSeekBarChangeListener)
-        mSeekBarLayout!!.addView(mRangeSeekBarView)
+        mRangeSeekBarView = RangeSeekBarView(context, mLeftProgressPos, mRightProgressPos)
+        mRangeSeekBarView.selectedMinValue = mLeftProgressPos
+        mRangeSeekBarView.selectedMaxValue = mRightProgressPos
+        mRangeSeekBarView.setStartEndTime(mLeftProgressPos, mRightProgressPos)
+        mRangeSeekBarView.setMinShootTime(VideoTrimmerUtil.MIN_SHOOT_DURATION)
+        mRangeSeekBarView.isNotifyWhileDragging = true
+        mRangeSeekBarView.setOnRangeSeekBarChangeListener(mOnRangeSeekBarChangeListener)
+        binding.seekBarLayout.addView(mRangeSeekBarView)
         if (mThumbsTotalCount - MAX_COUNT_RANGE > 0) {
             mAverageMsPx =
-                (mDuration - MAX_SHOOT_DURATION) / (mThumbsTotalCount - MAX_COUNT_RANGE) as Float
+                (mDuration - MAX_SHOOT_DURATION) / (mThumbsTotalCount - MAX_COUNT_RANGE).toFloat()
         } else {
             mAverageMsPx = 0f
         }
@@ -143,14 +131,48 @@ class VideoTrimmerView @JvmOverloads constructor(
 
     fun initVideoByURI(videoURI: Uri) {
         mSourceUri = videoURI
-        mVideoView.setVideoURI(videoURI)
-        mVideoView.requestFocus()
-        mVideoShootTipTv!!.setText(
-            String.format(
-                mContext!!.getResources().getString(R.string.video_shoot_tip),
-                VideoTrimmerUtil.VIDEO_MAX_TIME
-            )
+
+        binding.videoLoader.requestFocus()
+        binding.videoShootTip.text = String.format(
+            context.resources.getString(R.string.video_shoot_tip),
+            VideoTrimmerUtil.VIDEO_MAX_TIME
         )
+    }
+
+    private fun setupPlayer() {
+        val view = binding.videoLoader
+        mVideoPlayer = ExoPlayer.Builder(context).build().apply {
+            view.player = this
+            addListener(object : Player.Listener {
+                @OptIn(UnstableApi::class)
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    when (playbackState) {
+                        Player.STATE_BUFFERING -> {
+
+                        }
+                        Player.STATE_READY -> {
+                            mVideoPlayer.videoScalingMode = MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT
+                            videoPrepared()
+                        }
+                        Player.STATE_ENDED -> {
+                            videoCompleted()
+                        }
+
+                        Player.STATE_IDLE -> {
+
+                        }
+                    }
+                }
+
+                override fun onPlayerError(error: PlaybackException) {
+                }
+
+                override fun onVideoSizeChanged(videoSize: VideoSize) {
+                    super.onVideoSizeChanged(videoSize)
+                    videoSizeChange(videoSize)
+                }
+            })
+        }
     }
 
     private fun startShootVideoThumbs(
@@ -160,30 +182,31 @@ class VideoTrimmerView @JvmOverloads constructor(
         startPosition: Long,
         endPosition: Long,
     ) {
-        VideoTrimmerUtil.shootVideoThumbInBackground(
-            context, videoUri, totalThumbsCount, startPosition, endPosition,
-            { bitmap, interval ->
-                if (bitmap != null) {
-                    UiThreadExecutor.runTask("", object : Runnable {
-                        override fun run() {
-                            mVideoThumbAdapter.addBitmaps(bitmap)
-                        }
-                    }, 0L)
-                }
-            })
+        // TODO:
+//        VideoTrimmerUtil.shootVideoThumbInBackground(
+//            context, videoUri, totalThumbsCount, startPosition, endPosition,
+//            { bitmap, interval ->
+//                if (bitmap != null) {
+//                    UiThreadExecutor.runTask("", object : Runnable {
+//                        override fun run() {
+//                            mVideoThumbAdapter.addBitmaps(bitmap)
+//                        }
+//                    }, 0L)
+//                }
+//            })
     }
 
     private fun onCancelClicked() {
         mOnTrimVideoListener.onCancel()
     }
 
-    private fun videoPrepared(mp: MediaPlayer) {
-        val lp: LayoutParams = mVideoView.getLayoutParams()
-        val videoWidth = mp.getVideoWidth()
-        val videoHeight = mp.getVideoHeight()
+    private fun videoSizeChange(videoSize: VideoSize) {
+        val lp: LayoutParams = binding.videoLoader.layoutParams as LayoutParams
+        val videoWidth = videoSize.width
+        val videoHeight = videoSize.height
 
-        val screenWidth = mLinearVideo!!.getWidth()
-        val screenHeight = mLinearVideo!!.getHeight()
+        val screenWidth = binding.layoutSurfaceView.width
+        val screenHeight = binding.layoutSurfaceView.height
 
         if (videoHeight > videoWidth) {
             lp.width = screenWidth
@@ -193,8 +216,12 @@ class VideoTrimmerView @JvmOverloads constructor(
             val r = videoHeight / videoWidth.toFloat()
             lp.height = (lp.width * r).toInt()
         }
-        mVideoView.setLayoutParams(lp)
-        mDuration = mVideoView.getDuration()
+        binding.videoLoader.setLayoutParams(lp)
+    }
+
+    private fun videoPrepared() {
+
+        mDuration = mVideoPlayer.duration
         if (!this.restoreState) {
             seekTo(mRedProgressBarPos.toInt().toLong())
         } else {
@@ -202,7 +229,7 @@ class VideoTrimmerView @JvmOverloads constructor(
             seekTo(mRedProgressBarPos.toInt().toLong())
         }
         initRangeSeekBarView()
-        startShootVideoThumbs(mContext, mSourceUri, mThumbsTotalCount, 0, mDuration.toLong())
+        startShootVideoThumbs(context, mSourceUri, mThumbsTotalCount, 0, mDuration)
     }
 
     private fun videoCompleted() {
@@ -211,28 +238,28 @@ class VideoTrimmerView @JvmOverloads constructor(
     }
 
     private fun onVideoReset() {
-        mVideoView.pause()
+        mVideoPlayer.pause()
         setPlayPauseViewIcon(false)
     }
 
     private fun playVideoOrPause() {
-        mRedProgressBarPos = mVideoView.getCurrentPosition()
-        if (mVideoView.isPlaying()) {
-            mVideoView.pause()
+        mRedProgressBarPos = mVideoPlayer.currentPosition
+        if (mVideoPlayer.isPlaying) {
+            mVideoPlayer.pause()
             pauseRedProgressAnimation()
         } else {
-            mVideoView.start()
+            mVideoPlayer.play()
             playingRedProgressAnimation()
         }
-        setPlayPauseViewIcon(mVideoView.isPlaying())
+        setPlayPauseViewIcon(mVideoPlayer.isPlaying)
     }
 
     fun onVideoPause() {
-        if (mVideoView.isPlaying()) {
+        if (mVideoPlayer.isPlaying) {
             seekTo(mLeftProgressPos) //复位
-            mVideoView.pause()
+            mVideoPlayer.pause()
             setPlayPauseViewIcon(false)
-            mRedProgressIcon!!.setVisibility(GONE)
+            mRedProgressIcon.setVisibility(GONE)
         }
     }
 
@@ -241,25 +268,21 @@ class VideoTrimmerView @JvmOverloads constructor(
     }
 
     private fun setUpListeners() {
-        findViewById<View?>(R.id.cancelBtn).setOnClickListener(OnClickListener { view: View? -> onCancelClicked() })
+        binding.cancelBtn.setOnClickListener { _: View? -> onCancelClicked() }
 
-        findViewById<View?>(R.id.finishBtn).setOnClickListener(OnClickListener { view: View? -> onSaveClicked() })
-        mVideoView.setOnPreparedListener({ mp ->
-            mp.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT)
-            videoPrepared(mp)
-        })
-        mVideoView.setOnCompletionListener({ mp -> videoCompleted() })
-        mPlayView!!.setOnClickListener(OnClickListener { v: View? -> playVideoOrPause() })
+        binding.finishBtn.setOnClickListener { _: View? -> onSaveClicked() }
+
+        binding.iconVideoPlay.setOnClickListener { _: View? -> playVideoOrPause() }
     }
 
     private fun onSaveClicked() {
         if (mRightProgressPos - mLeftProgressPos < VideoTrimmerUtil.MIN_SHOOT_DURATION) {
-            Toast.makeText(mContext, "视频长不足3秒,无法上传", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "视频长不足3秒,无法上传", Toast.LENGTH_SHORT).show()
         } else {
-            mVideoView.pause()
+            mVideoPlayer.pause()
             VideoTrimmerUtil.trim(
-                mContext,
-                mSourceUri!!.getPath(),
+                context,
+                mSourceUri!!.path,
                 StorageUtil.getCacheDir(),
                 mLeftProgressPos,
                 mRightProgressPos,
@@ -269,27 +292,27 @@ class VideoTrimmerView @JvmOverloads constructor(
     }
 
     private fun seekTo(msec: Long) {
-        mVideoView.seekTo(msec.toInt())
+        mVideoPlayer.seekTo(msec.toInt())
         Log.d(TAG, "seekTo = " + msec)
     }
 
     private fun setPlayPauseViewIcon(isPlaying: Boolean) {
-        mPlayView!!.setImageResource(if (isPlaying) R.drawable.ic_video_pause_black else R.drawable.ic_video_play_black)
+        binding.iconVideoPlay.setImageResource(if (isPlaying) R.drawable.ic_video_pause_black else R.drawable.ic_video_play_black)
     }
 
     private val mOnRangeSeekBarChangeListener: RangeSeekBarView.OnRangeSeekBarChangeListener =
-        object : RangeSeekBarView.OnRangeSeekBarChangeListener() {
+        object : RangeSeekBarView.OnRangeSeekBarChangeListener {
             public override fun onRangeSeekBarValuesChanged(
                 bar: RangeSeekBarView?, minValue: Long, maxValue: Long, action: Int, isMin: Boolean,
                 pressedThumb: RangeSeekBarView.Thumb?,
             ) {
-                Log.d(TAG, "-----minValue----->>>>>>" + minValue)
-                Log.d(TAG, "-----maxValue----->>>>>>" + maxValue)
+                Log.d(TAG, "-----minValue----->>>>>>$minValue")
+                Log.d(TAG, "-----maxValue----->>>>>>$maxValue")
                 mLeftProgressPos = minValue + scrollPos
                 mRedProgressBarPos = mLeftProgressPos
                 mRightProgressPos = maxValue + scrollPos
-                Log.d(TAG, "-----mLeftProgressPos----->>>>>>" + mLeftProgressPos)
-                Log.d(TAG, "-----mRightProgressPos----->>>>>>" + mRightProgressPos)
+                Log.d(TAG, "-----mLeftProgressPos----->>>>>>$mLeftProgressPos")
+                Log.d(TAG, "-----mRightProgressPos----->>>>>>$mRightProgressPos")
                 when (action) {
                     MotionEvent.ACTION_DOWN -> isSeeking = false
                     MotionEvent.ACTION_MOVE -> {
@@ -308,7 +331,7 @@ class VideoTrimmerView @JvmOverloads constructor(
                     else -> {}
                 }
 
-                mRangeSeekBarView!!.setStartEndTime(mLeftProgressPos, mRightProgressPos)
+                mRangeSeekBarView.setStartEndTime(mLeftProgressPos, mRightProgressPos)
             }
         }
 
@@ -316,7 +339,7 @@ class VideoTrimmerView @JvmOverloads constructor(
         object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                Log.d(TAG, "newState = " + newState)
+                Log.d(TAG, "newState = $newState")
             }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -334,7 +357,7 @@ class VideoTrimmerView @JvmOverloads constructor(
                     scrollPos = 0
                     mLeftProgressPos = mRangeSeekBarView.selectedMinValue + scrollPos
                     mRightProgressPos = mRangeSeekBarView.selectedMaxValue + scrollPos
-                    Log.d(TAG, "onScrolled >>>> mLeftProgressPos = " + mLeftProgressPos)
+                    Log.d(TAG, "onScrolled >>>> mLeftProgressPos = $mLeftProgressPos")
                     mRedProgressBarPos = mLeftProgressPos
                 } else {
                     isSeeking = true
@@ -342,16 +365,16 @@ class VideoTrimmerView @JvmOverloads constructor(
                         (mAverageMsPx * (RECYCLER_VIEW_PADDING + scrollX) / THUMB_WIDTH) as Long
                     mLeftProgressPos = mRangeSeekBarView.selectedMinValue + scrollPos
                     mRightProgressPos = mRangeSeekBarView.selectedMaxValue + scrollPos
-                    Log.d(TAG, "onScrolled >>>> mLeftProgressPos = " + mLeftProgressPos)
+                    Log.d(TAG, "onScrolled >>>> mLeftProgressPos = $mLeftProgressPos")
                     mRedProgressBarPos = mLeftProgressPos
-                    if (mVideoView.isPlaying()) {
-                        mVideoView.pause()
+                    if (mVideoPlayer.isPlaying) {
+                        mVideoPlayer.pause()
                         setPlayPauseViewIcon(false)
                     }
-                    mRedProgressIcon!!.setVisibility(GONE)
+                    mRedProgressIcon.setVisibility(GONE)
                     seekTo(mLeftProgressPos)
-                    mRangeSeekBarView!!.setStartEndTime(mLeftProgressPos, mRightProgressPos)
-                    mRangeSeekBarView!!.invalidate()
+                    mRangeSeekBarView.setStartEndTime(mLeftProgressPos, mRightProgressPos)
+                    mRangeSeekBarView.invalidate()
                 }
                 lastScrollX = scrollX
             }
@@ -361,11 +384,11 @@ class VideoTrimmerView @JvmOverloads constructor(
      * 水平滑动了多少px
      */
     private fun calcScrollXDistance(): Int {
-        val layoutManager = mVideoThumbRecyclerView!!.getLayoutManager() as LinearLayoutManager?
+        val layoutManager = mVideoThumbRecyclerView.layoutManager as LinearLayoutManager?
         val position = layoutManager!!.findFirstVisibleItemPosition()
         val firstVisibleChildView = layoutManager.findViewByPosition(position)
-        val itemWidth = firstVisibleChildView!!.getWidth()
-        return (position) * itemWidth - firstVisibleChildView.getLeft()
+        val itemWidth = firstVisibleChildView!!.width
+        return (position) * itemWidth - firstVisibleChildView.left
     }
 
     private fun playingRedProgressAnimation() {
@@ -375,26 +398,26 @@ class VideoTrimmerView @JvmOverloads constructor(
     }
 
     private fun playingAnimation() {
-        if (mRedProgressIcon!!.getVisibility() == GONE) {
-            mRedProgressIcon!!.setVisibility(VISIBLE)
+        if (mRedProgressIcon.isGone) {
+            mRedProgressIcon.setVisibility(VISIBLE)
         }
-        val params = mRedProgressIcon!!.getLayoutParams() as LayoutParams
-        val start = (RECYCLER_VIEW_PADDING + (mRedProgressBarPos - scrollPos) * averagePxMs) as Int
-        val end = (RECYCLER_VIEW_PADDING + (mRightProgressPos - scrollPos) * averagePxMs) as Int
+        val params = mRedProgressIcon.layoutParams as LayoutParams
+        val start = (RECYCLER_VIEW_PADDING + (mRedProgressBarPos - scrollPos) * averagePxMs).toInt()
+        val end = (RECYCLER_VIEW_PADDING + (mRightProgressPos - scrollPos) * averagePxMs).toInt()
         mRedProgressAnimator = ValueAnimator.ofInt(start, end)
             .setDuration((mRightProgressPos - scrollPos) - (mRedProgressBarPos - scrollPos))
-        mRedProgressAnimator!!.setInterpolator(LinearInterpolator())
+        mRedProgressAnimator!!.interpolator = LinearInterpolator()
         mRedProgressAnimator!!.addUpdateListener(AnimatorUpdateListener { animation: ValueAnimator? ->
             params.leftMargin = animation!!.getAnimatedValue() as Int
-            mRedProgressIcon!!.setLayoutParams(params)
-            Log.d(TAG, "----onAnimationUpdate--->>>>>>>" + mRedProgressBarPos)
+            mRedProgressIcon.setLayoutParams(params)
+            Log.d(TAG, "----onAnimationUpdate--->>>>>>>$mRedProgressBarPos")
         })
         mRedProgressAnimator!!.start()
     }
 
     private fun pauseRedProgressAnimation() {
-        mRedProgressIcon!!.clearAnimation()
-        if (mRedProgressAnimator != null && mRedProgressAnimator!!.isRunning()) {
+        mRedProgressIcon.clearAnimation()
+        if (mRedProgressAnimator != null && mRedProgressAnimator!!.isRunning) {
             mAnimationHandler.removeCallbacks(mAnimationRunnable)
             mRedProgressAnimator!!.cancel()
         }
@@ -407,8 +430,8 @@ class VideoTrimmerView @JvmOverloads constructor(
     }
 
     private fun updateVideoProgress() {
-        val currentPosition: Long = mVideoView.getCurrentPosition()
-        Log.d(TAG, "updateVideoProgress currentPosition = " + currentPosition)
+        val currentPosition: Long = mVideoPlayer.currentPosition
+        Log.d(TAG, "updateVideoProgress currentPosition = $currentPosition")
         if (currentPosition >= (mRightProgressPos)) {
             mRedProgressBarPos = mLeftProgressPos
             pauseRedProgressAnimation()

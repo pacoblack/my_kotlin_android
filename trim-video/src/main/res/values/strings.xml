@@ -2,4 +2,5 @@
 <resources>
     <string name="back">back</string>
     <string name="finish">finish</string>
+    <string name="video_shoot_tip">Drag to select the segment within %d second that you want to post！</string>
 </resources>
