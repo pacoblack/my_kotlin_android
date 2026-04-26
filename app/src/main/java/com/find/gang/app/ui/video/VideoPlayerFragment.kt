@@ -39,6 +39,9 @@ class VideoPlayerFragment : BaseFragment<FragmentVideoPlayerBinding, VideoPlayer
     private var exoPlayer: ExoPlayer? = null
     private var playerView: PlayerView? = null
 
+    override val isToolbarVisible: Boolean
+        get() = false
+
     // 文件选择器
     private val filePickerLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()

@@ -18,8 +18,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="视频播放"
-                android:textColor="@android:color/white"
+                android:text="视频地址"
+                android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

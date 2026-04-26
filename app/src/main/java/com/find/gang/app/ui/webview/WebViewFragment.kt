@@ -21,6 +21,9 @@ class WebViewFragment : BaseFragment<FragmentWebviewBinding, WebViewModel>(R.lay
     @JvmField
     var url: String? = null
 
+    override val isToolbarVisible: Boolean
+        get() = false
+
     override fun getViewModelClass(): Class<WebViewModel> = WebViewModel::class.java
 
     override fun initView() {
