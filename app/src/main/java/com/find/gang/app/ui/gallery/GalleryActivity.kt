@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
@@ -56,6 +57,10 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R
     }
 
     private fun setupToolbar() {
+        binding.btnLeftToolbar.setOnClickListener {
+            // 执行你的操作，比如打开抽屉、返回上一页等
+            binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.filter_image -> { filterMode = FilterMode.IMAGE; refreshMediaGrid() }
@@ -125,7 +130,6 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R
     private fun selectDirectory(index: Int) {
         if (index < 0 || index >= directories.size) return
         currentDirectoryIndex = index
-        binding.toolbar.title = directories[index].name
         scanMediaFiles(directories[index].uri)
         binding.drawerLayout.closeDrawer(GravityCompat.START)
     }
@@ -188,7 +192,6 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R
                 currentDirectoryIndex = -1
                 allMedia.clear()
                 mediaAdapter.submitList(emptyList())
-                binding.toolbar.title = "无目录"
             }
         } else if (currentDirectoryIndex > position) {
             currentDirectoryIndex--  // 修正索引

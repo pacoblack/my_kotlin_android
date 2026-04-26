@@ -19,8 +19,17 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:title="目录名"
-            app:menu="@menu/menu_filter_gallery" />
+            app:title=""
+            app:menu="@menu/menu_filter_gallery" >
+            <ImageView
+                android:id="@+id/btn_left_toolbar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_open_drawer"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                android:contentDescription="菜单" />
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <FrameLayout
             android:layout_width="match_parent"
