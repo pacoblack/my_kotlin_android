@@ -43,9 +43,9 @@ class DirectoryAdapter(
         fun bind(item: DirectoryItem) {
             itemView.findViewById<TextView>(R.id.tv_dir_name).text = item.name
             itemView.findViewById<ImageButton>(R.id.btn_delete).setOnClickListener {
-                onDeleteClick(adapterPosition)
+                onDeleteClick(getBindingAdapterPosition())
             }
-            itemView.setOnClickListener { onItemClick(adapterPosition) }
+            itemView.setOnClickListener { onItemClick(getBindingAdapterPosition()) }
         }
     }
 }
@@ -84,7 +84,7 @@ class MediaAdapter : RecyclerView.Adapter<MediaAdapter.VH>() {
                         .into(ivThumb)
                 }
                 MediaType.VIDEO -> {
-                    ivTypeIcon.setImageResource(R.drawable.ic_video)
+                    ivTypeIcon.setImageResource(R.drawable.ic_player)
                     // 使用自定义缩略图加载（见下方说明）
                     loadVideoThumbnail(item.uri, ivThumb)
                 }
@@ -106,7 +106,7 @@ class MediaAdapter : RecyclerView.Adapter<MediaAdapter.VH>() {
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        imageView.setImageResource(R.drawable.ic_broken_video)
+                        imageView.setImageResource(R.drawable.ic_broken_file)
                     }
                 } finally {
                     retriever.release()

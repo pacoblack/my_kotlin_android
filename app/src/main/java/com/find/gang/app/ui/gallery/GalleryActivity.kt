@@ -1,8 +1,22 @@
 package com.find.gang.app.ui.gallery
 
+import android.content.Intent
+import android.net.Uri
+import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.GravityCompat
+import androidx.documentfile.provider.DocumentFile
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.find.gang.app.R
 import com.find.gang.app.base.BaseActivity
 import com.find.gang.app.databinding.ActivityGalleryBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import androidx.core.net.toUri
+import androidx.core.content.edit
 
 class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R.layout.activity_gallery) {
     override fun getViewModelClass(): Class<GalleryViewModel> = GalleryViewModel::class.java
@@ -14,6 +28,18 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R
 
     private lateinit var directoryAdapter: DirectoryAdapter
     private lateinit var mediaAdapter: MediaAdapter
+
+    private val openTreeLauncher = registerForActivityResult(
+        ActivityResultContracts.OpenDocumentTree()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            // 2. 手动持久化权限（必须）
+            val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+            contentResolver.takePersistableUriPermission(uri, flags)
+            // 这里保存或使用 uri
+        }
+    }
 
     override fun initView() {
         setupToolbar()
@@ -40,8 +66,8 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R
             onDeleteClick = { position -> deleteDirectory(position) },
             onItemClick = { position -> selectDirectory(position) }
         )
-        binding.rvDirectories.layoutManager = LinearLayoutManager(this)
-        binding.rvDirectories.adapter = directoryAdapter
+        binding.drawerIncludeContent.rvDirectories.layoutManager = LinearLayoutManager(this)
+        binding.drawerIncludeContent.rvDirectories.adapter = directoryAdapter
     }
 
     private fun setupMediaRecycler() {
@@ -59,12 +85,12 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R
             val parts = entry.split("|", limit = 2)
             if (parts.size == 2) {
                 val name = parts[0]
-                val uri = Uri.parse(parts[1])
+                val uri = parts[1].toUri()
                 // 尝试再次获取持久化权限（通常已有）
                 try {
                     contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     directories.add(DirectoryItem(name, uri))
-                } catch (e: SecurityException) {
+                } catch (_: SecurityException) {
                     // 权限丢失，跳过
                 }
             }
@@ -79,15 +105,11 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R
         val prefs = getSharedPreferences("dirs", MODE_PRIVATE)
         val set = mutableSetOf<String>()
         directories.forEach { set.add("${it.name}|${it.uri}") }
-        prefs.edit().putStringSet("dir_set", set).apply()
+        prefs.edit { putStringSet("dir_set", set) }
     }
 
     private fun addDirectory() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or
-                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-        }
-        startActivityForResult(intent, REQUEST_CODE_OPEN_TREE)
+        openTreeLauncher.launch(null)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -122,7 +144,7 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R
         // 异步扫描，这里用协程示意
         lifecycleScope.launch(Dispatchers.IO) {
             val media = mutableListOf<MediaItem>()
-            val doc = DocumentFile.fromTreeUri(this@MainActivity, rootUri)
+            val doc = DocumentFile.fromTreeUri(this@GalleryActivity, rootUri)
             doc?.listFiles()?.forEach { file ->
                 if (file.isFile) {
                     val name = file.name ?: return@forEach
@@ -164,7 +186,7 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R
         // 释放持久化权限
         try {
             contentResolver.releasePersistableUriPermission(item.uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        } catch (e: Exception) {}
+        } catch (_: Exception) {}
         directories.removeAt(position)
         directoryAdapter.submitList(directories.toList())
         saveDirectories()
@@ -185,7 +207,7 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R
     }
 
     private fun setupListeners() {
-        binding.btnAddDirectory.setOnClickListener { addDirectory() }
+        binding.drawerIncludeContent.btnAddDirectory.setOnClickListener { addDirectory() }
         binding.btnOpenDrawer.setOnClickListener { binding.drawerLayout.openDrawer(GravityCompat.START) }
     }
 

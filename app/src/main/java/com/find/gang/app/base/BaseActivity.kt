@@ -6,13 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewbinding.ViewBinding
 import com.find.gang.app.toolbox.PermissionTools
 
 /**
  * Activity 基类，支持 DataBinding 和 ViewModel 的 MVVM 模式
  * @param layoutId 布局文件资源 ID
  */
-abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel>(
+abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel>(
     @LayoutRes private val layoutId: Int
 ) : AppCompatActivity() {
 
@@ -28,7 +29,9 @@ abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel>(
         super.onCreate(savedInstanceState)
         // 初始化 DataBinding
         binding = DataBindingUtil.setContentView(this, layoutId)
-        binding.lifecycleOwner = this
+        if (binding is ViewDataBinding) {
+            (binding as ViewDataBinding).lifecycleOwner = this
+        }
         // 初始化 ViewModel
         viewModel = ViewModelProvider(this)[getViewModelClass()]
         // 初始化视图
