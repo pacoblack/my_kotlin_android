@@ -51,16 +51,17 @@
         android:padding="8dp"/>
     <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
         android:id="@+id/dots_indicator"
-        android:layout_width="wrap_content"
+        android:layout_width="64dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|center"
-        android:layout_marginTop="16dp"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
         app:dotsColor="#9E9E9E"
         app:dotsCornerRadius="4dp"
         app:dotsSize="8dp"
         app:dotsSpacing="4dp"
         app:dotsWidthFactor="2.5"
-        app:selectedDotColor="#6200EE"
+        app:selectedDotColor="#006400"
         app:progressMode="true"
         />
 </FrameLayout>

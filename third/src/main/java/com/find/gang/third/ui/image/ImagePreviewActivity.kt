@@ -74,7 +74,7 @@ class ImagePreviewActivity : BaseActivity<ActivityImageBinding>(R.layout.activit
     }
 
     private fun updateTitle(position: Int) {
-        binding.tvTitle.text = String.format("图片预览 (%d/%d)", position + 1, mediaItems!!.size)
+        binding.tvTitle.text = "图片预览(${position + 1}/${mediaItems.size})"
     }
 
     // 图片适配器
