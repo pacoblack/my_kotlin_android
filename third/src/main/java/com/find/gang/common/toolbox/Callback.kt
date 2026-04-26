@@ -1,4 +1,4 @@
-package com.find.gang.app.toolbox
+package com.find.gang.common.toolbox
 
 interface Callback<P,V> {
     @Throws(Exception::class)

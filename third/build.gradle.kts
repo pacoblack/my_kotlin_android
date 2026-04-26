@@ -51,4 +51,20 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.dotsindicator)
+    implementation(libs.permissionx)
+
+    implementation(libs.glide)
+
+    // 修复 compose 问题
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+
+    // kotlin 协程问题
+    implementation(libs.kotlinx.coroutines.android)
 }

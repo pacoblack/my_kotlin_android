@@ -21,8 +21,8 @@ import com.find.gang.app.R
 import com.find.gang.app.base.BaseFragment
 import com.find.gang.app.databinding.FragmentVideoPlayerBinding
 import com.find.gang.app.router.RouterPath
-import com.find.gang.app.toolbox.Callback2
-import com.find.gang.app.toolbox.PermissionTools
+import com.find.gang.common.toolbox.Callback2
+import com.find.gang.common.toolbox.PermissionTools
 import com.find.gang.app.ui.EditVideoActivity
 
 @Route(path = RouterPath.VIDEO_PLAYER)

@@ -1,29 +1,18 @@
-package com.find.gang.app.base
+package com.find.gang.common
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.find.gang.common.toolbox.PermissionTools
 
-/**
- * Activity 基类，支持 DataBinding 和 ViewModel 的 MVVM 模式
- * @param layoutId 布局文件资源 ID
- */
-abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel>(
+abstract class BaseActivity<VB : ViewBinding>(
     @LayoutRes private val layoutId: Int
 ) : AppCompatActivity() {
 
     protected lateinit var binding: VB
-    protected lateinit var viewModel: VM
-
-    /**
-     * 获取 ViewModel 的 Class 对象，由子类实现
-     */
-    protected abstract fun getViewModelClass(): Class<VM>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +21,6 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel>(
         if (binding is ViewDataBinding) {
             (binding as ViewDataBinding).lifecycleOwner = this
         }
-        // 初始化 ViewModel
-        viewModel = ViewModelProvider(this)[getViewModelClass()]
         // 初始化视图
         initView()
         // 观察数据变化

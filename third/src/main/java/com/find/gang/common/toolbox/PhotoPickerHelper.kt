@@ -1,4 +1,4 @@
-package com.find.gang.app.toolbox
+package com.find.gang.common.toolbox
 
 import android.net.Uri
 import androidx.activity.ComponentActivity

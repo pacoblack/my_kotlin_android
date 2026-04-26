@@ -10,6 +10,9 @@ import com.bumptech.glide.Glide
 import com.find.gang.app.R
 import com.find.gang.app.databinding.ItemDirectoryGalleryBinding
 import com.find.gang.app.databinding.ItemMediaGalleryBinding
+import com.find.gang.third.ui.image.ImagePreviewActivity
+import com.find.gang.third.ui.image.MediaItem
+import com.find.gang.third.ui.image.MediaType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -68,14 +71,14 @@ class MediaAdapter : RecyclerView.Adapter<MediaAdapter.VH>() {
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position], position)
     }
 
     override fun getItemCount() = items.size
 
     inner class VH(private val binding: ItemMediaGalleryBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: MediaItem) {
+        fun bind(item: MediaItem, position: Int) {
             when (item.type) {
                 MediaType.IMAGE -> {
                     binding.ivTypeIcon.setImageResource(R.drawable.ic_image)
@@ -83,12 +86,17 @@ class MediaAdapter : RecyclerView.Adapter<MediaAdapter.VH>() {
                         .load(item.uri)
                         .centerCrop()
                         .into(binding.ivThumbnail)
+                    binding.ivThumbnail.setOnClickListener {
+                        ImagePreviewActivity.start(binding.root.context, items, position)
+                    }
                 }
                 MediaType.VIDEO -> {
                     binding.ivTypeIcon.setImageResource(R.drawable.ic_player)
                     // 使用自定义缩略图加载（见下方说明）
                     loadVideoThumbnail(item.uri, binding.ivThumbnail)
                 }
+
+                else -> {}
             }
         }
 

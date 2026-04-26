@@ -19,6 +19,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.core.net.toUri
 import androidx.core.content.edit
+import com.find.gang.third.ui.image.MediaItem
+import com.find.gang.third.ui.image.MediaType
 
 class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R.layout.activity_gallery) {
     override fun getViewModelClass(): Class<GalleryViewModel> = GalleryViewModel::class.java

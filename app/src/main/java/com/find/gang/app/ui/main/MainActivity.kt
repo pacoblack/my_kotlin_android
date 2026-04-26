@@ -60,12 +60,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_camera -> {
-                showToast("点击 camera")
                 GalleryActivity.startActivity(this)
                 true
             }
             R.id.action_more -> {
-                showToast("点击 more")
                 true
             }
             else -> super.onOptionsItemSelected(item)
