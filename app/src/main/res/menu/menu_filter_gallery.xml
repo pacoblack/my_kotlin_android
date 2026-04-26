@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/filter_all" android:title="全部" />
+    <item android:id="@+id/filter_image" android:title="图片" />
+    <item android:id="@+id/filter_video" android:title="视频" />
+</menu>
