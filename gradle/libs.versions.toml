@@ -1,5 +1,5 @@
 [versions]
-agp = "8.4.2"
+agp = "8.2.2"
 coreKtx = "1.15.0"  # 降低版本以兼容API 35
 junit = "4.13.2"
 junitVersion = "1.3.0"
@@ -104,4 +104,3 @@ glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = 
 
 # 权限
 permissionx = { module = "com.guolindev.permissionx:permissionx", version.ref = "permissionx" }
-androidx-webgpu = { group = "androidx.webgpu", name = "webgpu", version.ref = "webgpu" }

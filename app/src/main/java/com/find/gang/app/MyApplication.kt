@@ -6,7 +6,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 
 class MyApplication : Application() {
     override fun onCreate() {
-        super.ctivityonCreate()
+        super.onCreate()
         // ARouter初始化
         if (BuildConfig.DEBUG) {
             ARouter.openLog()

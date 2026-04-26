@@ -13,3 +13,4 @@
 .externalNativeBuild
 jniLibs
 .idea
+.kotlin
