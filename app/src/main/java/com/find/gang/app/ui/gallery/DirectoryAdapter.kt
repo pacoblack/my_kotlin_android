@@ -3,14 +3,13 @@ package com.find.gang.app.ui.gallery
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.find.gang.app.R
+import com.find.gang.app.databinding.ItemDirectoryGalleryBinding
+import com.find.gang.app.databinding.ItemMediaGalleryBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,8 +28,10 @@ class DirectoryAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_directory_gallery, parent, false)
-        return VH(view)
+        val bind = ItemDirectoryGalleryBinding.inflate(
+        LayoutInflater.from(parent.context), parent, false
+        )
+        return VH(bind)
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
@@ -39,10 +40,10 @@ class DirectoryAdapter(
 
     override fun getItemCount() = items.size
 
-    inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class VH(private val binding: ItemDirectoryGalleryBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: DirectoryItem) {
-            itemView.findViewById<TextView>(R.id.tv_dir_name).text = item.name
-            itemView.findViewById<ImageButton>(R.id.btn_delete).setOnClickListener {
+            binding.tvDirName.text = item.name
+            binding.btnDelete.setOnClickListener {
                 onDeleteClick(getBindingAdapterPosition())
             }
             itemView.setOnClickListener { onItemClick(getBindingAdapterPosition()) }
@@ -60,8 +61,10 @@ class MediaAdapter : RecyclerView.Adapter<MediaAdapter.VH>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_media_gallery, parent, false)
-        return VH(view)
+        val bind = ItemMediaGalleryBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+        return VH(bind)
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
@@ -70,23 +73,21 @@ class MediaAdapter : RecyclerView.Adapter<MediaAdapter.VH>() {
 
     override fun getItemCount() = items.size
 
-    inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val ivThumb: ImageView = itemView.findViewById(R.id.iv_thumbnail)
-        private val ivTypeIcon: ImageView = itemView.findViewById(R.id.iv_type_icon)
+    inner class VH(private val binding: ItemMediaGalleryBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: MediaItem) {
             when (item.type) {
                 MediaType.IMAGE -> {
-                    ivTypeIcon.setImageResource(R.drawable.ic_image)
+                    binding.ivTypeIcon.setImageResource(R.drawable.ic_image)
                     Glide.with(itemView.context)
                         .load(item.uri)
                         .centerCrop()
-                        .into(ivThumb)
+                        .into(binding.ivThumbnail)
                 }
                 MediaType.VIDEO -> {
-                    ivTypeIcon.setImageResource(R.drawable.ic_player)
+                    binding.ivTypeIcon.setImageResource(R.drawable.ic_player)
                     // 使用自定义缩略图加载（见下方说明）
-                    loadVideoThumbnail(item.uri, ivThumb)
+                    loadVideoThumbnail(item.uri, binding.ivThumbnail)
                 }
             }
         }
@@ -104,7 +105,7 @@ class MediaAdapter : RecyclerView.Adapter<MediaAdapter.VH>() {
                     withContext(Dispatchers.Main) {
                         imageView.setImageBitmap(bitmap)
                     }
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     withContext(Dispatchers.Main) {
                         imageView.setImageResource(R.drawable.ic_broken_file)
                     }
