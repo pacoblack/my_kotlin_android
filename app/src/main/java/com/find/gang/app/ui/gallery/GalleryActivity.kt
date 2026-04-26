@@ -35,10 +35,14 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R
     ) { uri: Uri? ->
         if (uri != null) {
             // 2. 手动持久化权限（必须）
-            val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
-                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+            val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
             contentResolver.takePersistableUriPermission(uri, flags)
             // 这里保存或使用 uri
+            val name = getDirectoryName(uri)
+            directories.add(DirectoryItem(name, uri))
+            directoryAdapter.submitList(directories.toList())
+            saveDirectories()
+            if (currentDirectoryIndex == -1) selectDirectory(0)
         }
     }
 
@@ -111,21 +115,6 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R
 
     private fun addDirectory() {
         openTreeLauncher.launch(null)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_OPEN_TREE && resultCode == RESULT_OK) {
-            data?.data?.let { uri ->
-                contentResolver.takePersistableUriPermission(uri,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                val name = getDirectoryName(uri)
-                directories.add(DirectoryItem(name, uri))
-                directoryAdapter.submitList(directories.toList())
-                saveDirectories()
-                if (currentDirectoryIndex == -1) selectDirectory(0)
-            }
-        }
     }
 
     private fun getDirectoryName(uri: Uri): String {
@@ -213,7 +202,6 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R
     }
 
     companion object {
-        const val REQUEST_CODE_OPEN_TREE = 1001
 
         fun startActivity(activity: Activity){
             val intent = Intent(activity, GalleryActivity::class.java)
