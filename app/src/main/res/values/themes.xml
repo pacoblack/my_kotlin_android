@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Application" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.Application" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- 可继续自定义颜色等 -->
         <item name="colorPrimary">@color/primary_color</item>
         <item name="colorPrimaryDark">@color/primary_dark_color</item>

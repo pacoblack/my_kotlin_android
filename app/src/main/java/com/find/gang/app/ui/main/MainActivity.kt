@@ -9,6 +9,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.find.gang.app.R
 import com.find.gang.app.base.BaseActivity
 import com.find.gang.app.databinding.ActivityMainBinding
+import com.find.gang.app.ui.gallery.GalleryActivity
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.activity_main) {
 
@@ -60,6 +61,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
         return when (item.itemId) {
             R.id.action_camera -> {
                 showToast("点击 camera")
+                GalleryActivity.startActivity(this)
                 true
             }
             R.id.action_more -> {

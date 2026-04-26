@@ -1,5 +1,6 @@
 package com.find.gang.app.ui.gallery
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.view.View
@@ -213,5 +214,10 @@ class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R
 
     companion object {
         const val REQUEST_CODE_OPEN_TREE = 1001
+
+        fun startActivity(activity: Activity){
+            val intent = Intent(activity, GalleryActivity::class.java)
+            activity.startActivity(intent)
+        }
     }
 }
