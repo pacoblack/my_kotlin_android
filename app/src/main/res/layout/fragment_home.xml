@@ -13,7 +13,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:title="首页"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@android:color/white"
+            app:menu="@menu/menu_toolbar_home"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_home"
