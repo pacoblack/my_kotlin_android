@@ -2,6 +2,7 @@ package com.find.gang.third.ui.video
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -31,7 +32,7 @@ import java.io.File
 import java.util.concurrent.Executors
 
 @UnstableApi
-class VideoPlayerActivity : AppCompatActivity() {
+class VideoWatchActivity : AppCompatActivity() {
     private val binding by lazy { ActivityVideoPreviewBinding.inflate(layoutInflater) }
     private val videoUri by lazy { intent.extras?.getString(EXTRA_VIDEO_URI)?.toUri() }
 
@@ -152,7 +153,7 @@ class VideoPlayerActivity : AppCompatActivity() {
                             Player.STATE_BUFFERING -> showProgress(true)
                             Player.STATE_READY -> showProgress(false)
                             Player.STATE_ENDED -> {
-                                Toast.makeText(this@VideoPlayerActivity, "播放完成", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@VideoWatchActivity, "播放完成", Toast.LENGTH_SHORT).show()
                                 saveVideoAfterPlayback()
                             }
                             Player.STATE_IDLE -> {
@@ -230,10 +231,10 @@ class VideoPlayerActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_VIDEO_URI ="extra_video_uri"
-        fun start(context: Context, uri: String) {
+        fun start(context: Context, uri: Uri) {
             context.startActivity(
                 Intent(
-                    context, VideoPlayerActivity::class.java
+                    context, VideoWatchActivity::class.java
                 ).putExtra(EXTRA_VIDEO_URI, uri)
             )
         }

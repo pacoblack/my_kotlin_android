@@ -4,5 +4,7 @@
     <application>
         <activity android:name="com.find.gang.third.ui.image.ImagePreviewActivity"
             android:exported="true"/>
+        <activity android:name="com.find.gang.third.ui.video.VideoWatchActivity"
+            android:exported="true"/>
     </application>
 </manifest>

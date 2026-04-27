@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.net.toUri
+import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -16,6 +17,7 @@ import com.find.gang.common.BaseActivity
 import com.find.gang.third.R
 import com.find.gang.third.databinding.ActivityImageBinding
 import com.find.gang.third.databinding.ItemImagePreviewBinding
+import com.find.gang.third.ui.video.VideoWatchActivity
 
 class ImagePreviewActivity : BaseActivity<ActivityImageBinding>(R.layout.activity_image) {
 
@@ -89,6 +91,7 @@ class ImagePreviewActivity : BaseActivity<ActivityImageBinding>(R.layout.activit
             ))
         }
 
+        @UnstableApi
         override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
             if (mediaItems[position].isVideo()) {
                 Glide.with(context)
@@ -99,7 +102,7 @@ class ImagePreviewActivity : BaseActivity<ActivityImageBinding>(R.layout.activit
                             .centerCrop()
                     )
                     .into(holder.photoView)
-//                holder.photoView.setOnClickListener {VideoPlayerActivity.start(context, mediaItems[position].uri)}
+                holder.photoView.setOnClickListener { VideoWatchActivity.start(context, mediaItems[position].uri)}
             } else if (mediaItems[position].isGif()){
                 Glide.with(context)
                     .asGif()
