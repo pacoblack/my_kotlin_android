@@ -1,5 +1,5 @@
 [versions]
-agp = "8.13.2"
+agp = "8.2.2"
 coreKtx = "1.15.0"  # 降低版本以兼容API 35
 junit = "4.13.2"
 junitVersion = "1.3.0"
@@ -31,7 +31,6 @@ rxandroid3 = "3.0.2"
 rxkotlin3 = "3.0.1"
 media3 = "1.4.1"  # 降低版本
 glide = "4.16.0"
-media3Ui = "1.10.0"  # 降低版本
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -41,7 +40,6 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -104,4 +102,3 @@ glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = 
 
 # 权限
 permissionx = { module = "com.guolindev.permissionx:permissionx", version.ref = "permissionx" }
-androidx-media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3Ui" }

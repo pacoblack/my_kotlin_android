@@ -125,7 +125,7 @@ class VideoPlayerFragment : BaseFragment<FragmentVideoPlayerBinding, VideoPlayer
         binding.btnEditLocal.setOnClickListener {
             activity?.let { it1 ->
                 if (videoUrl.isNullOrEmpty()) {
-                    showToast("请先选择视频：" + videoUrl)
+                    showToast("请先选择视频：$videoUrl")
                 } else {
                     EditVideoActivity.startActivity(it1, videoUrl!!)
                 }

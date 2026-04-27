@@ -1,7 +1,6 @@
 package com.find.gang.video.lib
 
 import android.animation.ValueAnimator
-import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
@@ -17,9 +16,11 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.OptIn
+import androidx.core.view.isGone
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.VideoSize
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,10 +41,8 @@ import kotlin.Boolean
 import kotlin.Int
 import kotlin.Long
 import kotlin.apply
+import kotlin.isInitialized
 import kotlin.math.abs
-import kotlin.text.trim
-import androidx.core.view.isGone
-import androidx.media3.common.util.UnstableApi
 
 class VideoTrimmerView @JvmOverloads constructor(
     context: Context,
@@ -62,7 +61,7 @@ class VideoTrimmerView @JvmOverloads constructor(
     private var mSourceUri: Uri? = null
     private var mOnTrimVideoListener: VideoTrimListener? = null
     private var mDuration:Long = 0
-    private var restoreState = false
+    var restoreState = false
 
     //new
     private var mLeftProgressPos: Long = 0
@@ -197,7 +196,7 @@ class VideoTrimmerView @JvmOverloads constructor(
     }
 
     private fun onCancelClicked() {
-        mOnTrimVideoListener.onCancel()
+        mOnTrimVideoListener?.onCancel()
     }
 
     private fun videoSizeChange(videoSize: VideoSize) {
@@ -280,20 +279,21 @@ class VideoTrimmerView @JvmOverloads constructor(
             Toast.makeText(context, "视频长不足3秒,无法上传", Toast.LENGTH_SHORT).show()
         } else {
             mVideoPlayer.pause()
-            VideoTrimmerUtil.trim(
-                context,
-                mSourceUri!!.path,
-                StorageUtil.getCacheDir(),
-                mLeftProgressPos,
-                mRightProgressPos,
-                mOnTrimVideoListener
-            )
+            Toast.makeText(context, "TODO：存储视频", Toast.LENGTH_SHORT).show()
+//            VideoTrimmerUtil.trim(
+//                context,
+//                mSourceUri!!.path,
+//                StorageUtil.getCacheDir(),
+//                mLeftProgressPos,
+//                mRightProgressPos,
+//                mOnTrimVideoListener
+//            )
         }
     }
 
     private fun seekTo(msec: Long) {
-        mVideoPlayer.seekTo(msec.toInt())
-        Log.d(TAG, "seekTo = " + msec)
+        mVideoPlayer.seekTo(msec)
+        Log.d(TAG, "seekTo = $msec")
     }
 
     private fun setPlayPauseViewIcon(isPlaying: Boolean) {
@@ -362,7 +362,7 @@ class VideoTrimmerView @JvmOverloads constructor(
                 } else {
                     isSeeking = true
                     scrollPos =
-                        (mAverageMsPx * (RECYCLER_VIEW_PADDING + scrollX) / THUMB_WIDTH) as Long
+                        (mAverageMsPx * (RECYCLER_VIEW_PADDING + scrollX) / THUMB_WIDTH).toLong()
                     mLeftProgressPos = mRangeSeekBarView.selectedMinValue + scrollPos
                     mRightProgressPos = mRangeSeekBarView.selectedMaxValue + scrollPos
                     Log.d(TAG, "onScrolled >>>> mLeftProgressPos = $mLeftProgressPos")
@@ -407,11 +407,11 @@ class VideoTrimmerView @JvmOverloads constructor(
         mRedProgressAnimator = ValueAnimator.ofInt(start, end)
             .setDuration((mRightProgressPos - scrollPos) - (mRedProgressBarPos - scrollPos))
         mRedProgressAnimator!!.interpolator = LinearInterpolator()
-        mRedProgressAnimator!!.addUpdateListener(AnimatorUpdateListener { animation: ValueAnimator? ->
+        mRedProgressAnimator!!.addUpdateListener { animation: ValueAnimator? ->
             params.leftMargin = animation!!.getAnimatedValue() as Int
             mRedProgressIcon.setLayoutParams(params)
             Log.d(TAG, "----onAnimationUpdate--->>>>>>>$mRedProgressBarPos")
-        })
+        }
         mRedProgressAnimator!!.start()
     }
 
@@ -445,8 +445,8 @@ class VideoTrimmerView @JvmOverloads constructor(
      * Cancel trim thread execut action when finish
      */
     public override fun onDestroy() {
-        BackgroundExecutor.cancelAll("", true)
-        UiThreadExecutor.cancelAll("")
+//        BackgroundExecutor.cancelAll("", true)
+//        UiThreadExecutor.cancelAll("")
     }
 
     companion object {

@@ -37,7 +37,7 @@ android {
         }
     }
     buildFeatures {
-        compose = true
+        compose = false
         viewBinding = true
         dataBinding = true
     }
@@ -47,12 +47,21 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.material)
+
     // Media3 ExoPlayer
     implementation(libs.media3.exoplayer)
     implementation(libs.media3.exoplayer.hls)
     implementation(libs.media3.ui)
     implementation(libs.media3.session)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+configurations.all {
+    resolutionStrategy {
+        force("org.jetbrains.kotlin:kotlin-stdlib:1.9.23")
+        force("org.jetbrains.kotlin:kotlin-stdlib-common:1.9.23")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23")
+    }
 }

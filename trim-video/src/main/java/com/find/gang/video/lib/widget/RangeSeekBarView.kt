@@ -368,7 +368,7 @@ class RangeSeekBarView : View {
                 }
 
                 val rightPosition = if ((getWidth() - rangeR) >= 0) (getWidth() - rangeR) else 0f
-                val left_length = this.valueLength - (rightPosition + min_width)
+                val leftLength = this.valueLength - (rightPosition + min_width)
 
                 if (current_width > rangeL) {
                     current_width = rangeL + (current_width - rangeL)
@@ -376,9 +376,9 @@ class RangeSeekBarView : View {
                     current_width = rangeL - (rangeL - current_width)
                 }
 
-                if (current_width > left_length) {
+                if (current_width > leftLength) {
                     isMin = true
-                    current_width = left_length
+                    current_width = leftLength
                 }
 
                 if (current_width < thumbWidth * 2 / 3) {
