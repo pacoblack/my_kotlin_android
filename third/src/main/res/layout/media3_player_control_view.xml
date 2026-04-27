@@ -1,0 +1,119 @@
+<!-- res/layout/custom_player_control_view.xml -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#CC000000"
+    android:padding="12dp">
+
+    <!-- 顶部进度条和时间显示 -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/time_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:layout_marginEnd="48dp"
+        app:layout_constraintBottom_toTopOf="@id/exo_progress">
+
+        <TextView
+            android:id="@id/exo_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:text="00:00" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@id/exo_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:text="10:00" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <!-- 进度条 -->
+    <androidx.media3.ui.DefaultTimeBar
+        android:id="@id/exo_progress"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="48dp"
+        app:played_color="#59bf76"
+        app:scrubber_color="#4CAF50"
+        app:scrubber_dragged_size="16dp"
+        app:scrubber_enabled_size="12dp"
+        app:unplayed_color="#757575"
+        app:buffered_color="#BDBDBD"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/time_container"
+        app:layout_constraintRight_toRightOf="@+id/time_container"/>
+
+    <!-- 控制按钮区域 -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/controls_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- 后退10秒按钮 -->
+        <ImageButton
+            android:id="@id/exo_rew"
+            style="@style/ExoMediaButton.Rewind"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="后退10秒"
+            android:src="@drawable/exo_legacy_controls_rewind" />
+
+        <!-- 播放/暂停按钮 -->
+        <ImageButton
+            android:id="@id/exo_play_pause"
+            style="@style/ExoMediaButton.Play"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:contentDescription="播放"
+            android:src="@drawable/exo_icon_play" />
+
+        <!-- 前进10秒按钮 -->
+        <ImageButton
+            android:id="@id/exo_ffwd"
+            style="@style/ExoMediaButton.FastForward"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="前进10秒"
+            android:src="@drawable/exo_legacy_controls_fastforward" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <!-- 全屏按钮 -->
+    <ImageButton
+        android:id="@id/exo_fullscreen"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:contentDescription="退出全屏"
+        android:src="@drawable/exo_ic_fullscreen_exit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/time_container"
+        app:layout_constraintRight_toRightOf="parent" />
+    <ImageButton
+        android:id="@id/exo_minimal_fullscreen"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:contentDescription="全屏"
+        android:src="@drawable/exo_styled_controls_fullscreen_enter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/time_container"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_video_info"
+        android:icon="@drawable/ic_progress"
+        android:title="查看视频"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_video_save"
+        android:icon="@drawable/ic_save"
+        android:title="合并视频"
+        app:showAsAction="never" />
+</menu>
