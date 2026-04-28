@@ -38,7 +38,6 @@ class VideoWatchActivity : AppCompatActivity() {
     private lateinit var playerView: PlayerView
     private lateinit var progressBar: ProgressBar
     private lateinit var player: ExoPlayer
-    private lateinit var videoCache: Cache
     private var isFullscreen = true
 
     private val executor = Executors.newSingleThreadExecutor()
@@ -71,9 +70,6 @@ class VideoWatchActivity : AppCompatActivity() {
             finish()
             return
         }
-        // 初始化缓存目录
-        videoCache = VideoCacheManager.getCache(this, videoUri!!)
-
     }
 
     private fun toggleFullscreen(value:Boolean) {
@@ -131,7 +127,6 @@ class VideoWatchActivity : AppCompatActivity() {
     @OptIn(UnstableApi::class)
     override fun onDestroy() {
         super.onDestroy()
-        releaseCache()
         executor.shutdown();
     }
 
@@ -163,7 +158,8 @@ class VideoWatchActivity : AppCompatActivity() {
                 })
 
                 // 准备媒体源
-                val mediaSource = buildMediaSource(this, videoCache, videoUri!!)
+                val cache = VideoCacheManager.getCache(this, videoUri!!)
+                val mediaSource = buildMediaSource(this, cache, videoUri!!)
                 exoPlayer.setMediaSource(mediaSource)
                 exoPlayer.prepare()
                 exoPlayer.playWhenReady = true
@@ -208,11 +204,6 @@ class VideoWatchActivity : AppCompatActivity() {
 
     private fun releasePlayer() {
         player.release()
-    }
-
-    @OptIn(UnstableApi::class)
-    private fun releaseCache() {
-        videoCache.release()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
