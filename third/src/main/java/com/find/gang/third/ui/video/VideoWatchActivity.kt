@@ -2,7 +2,6 @@ package com.find.gang.third.ui.video
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -231,7 +230,7 @@ class VideoWatchActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_VIDEO_URI ="extra_video_uri"
-        fun start(context: Context, uri: Uri) {
+        fun start(context: Context, uri: String) {
             context.startActivity(
                 Intent(
                     context, VideoWatchActivity::class.java

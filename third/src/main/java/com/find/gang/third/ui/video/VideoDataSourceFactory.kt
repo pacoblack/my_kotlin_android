@@ -26,7 +26,6 @@ import com.tbuonomo.viewpagerdotsindicator.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
-import kotlin.text.ifEmpty
 
 object VideoDataSourceFactory {
 
@@ -100,7 +99,11 @@ object VideoDataSourceFactory {
     @UnstableApi
     class MyCacheKeyFactory: CacheKeyFactory {
         override fun buildCacheKey(dataSpec: DataSpec): String {
-            return dataSpec.key?.ifEmpty { generateCacheKey(dataSpec.uri) } ?: dataSpec.key!!
+            return if (dataSpec.key.isNullOrEmpty()) {
+                generateCacheKey(dataSpec.uri)
+            } else {
+                dataSpec.key!!
+            }
         }
 
         companion object{

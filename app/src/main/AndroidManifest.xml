@@ -17,6 +17,8 @@
     <!-- 允许WebView访问位置（如果需要） -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
         tools:ignore="CoarseFineLocation" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:name=".MyApplication"
         android:allowBackup="true"

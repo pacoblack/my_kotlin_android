@@ -5,6 +5,8 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.annotation.OptIn
+import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.find.gang.app.R
@@ -13,6 +15,7 @@ import com.find.gang.app.databinding.ItemMediaGalleryBinding
 import com.find.gang.third.ui.image.ImagePreviewActivity
 import com.find.gang.third.ui.image.MediaItem
 import com.find.gang.third.ui.image.MediaType
+import com.find.gang.third.ui.video.VideoWatchActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +23,7 @@ import kotlinx.coroutines.withContext
 
 class DirectoryAdapter(
     private val onDeleteClick: (Int) -> Unit,
-    private val onItemClick: (Int) -> Unit
+    private val onItemClick: (Int) -> Unit,
 ) : RecyclerView.Adapter<DirectoryAdapter.VH>() {
 
     private var items = listOf<DirectoryItem>()
@@ -78,6 +81,7 @@ class MediaAdapter : RecyclerView.Adapter<MediaAdapter.VH>() {
 
     inner class VH(private val binding: ItemMediaGalleryBinding) : RecyclerView.ViewHolder(binding.root) {
 
+        @OptIn(UnstableApi::class)
         fun bind(item: MediaItem, position: Int) {
             when (item.type) {
                 MediaType.IMAGE -> {
@@ -94,6 +98,9 @@ class MediaAdapter : RecyclerView.Adapter<MediaAdapter.VH>() {
                     binding.ivTypeIcon.setImageResource(R.drawable.ic_player)
                     // 使用自定义缩略图加载（见下方说明）
                     loadVideoThumbnail(item.uri, binding.ivThumbnail)
+                    binding.ivThumbnail.setOnClickListener {
+                        VideoWatchActivity.start(binding.root.context, item.uri.toString())
+                    }
                 }
 
                 else -> {}
