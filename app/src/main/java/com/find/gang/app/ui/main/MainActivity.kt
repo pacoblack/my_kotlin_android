@@ -1,14 +1,16 @@
 package com.find.gang.app.ui.main
 
+import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.find.gang.app.R
 import com.find.gang.app.base.BaseActivity
 import com.find.gang.app.databinding.ActivityMainBinding
+import com.find.gang.app.ui.dialog.InputDialogConfig
+import com.find.gang.app.ui.dialog.InputDialogFragment
 import com.find.gang.app.ui.gallery.GalleryActivity
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.activity_main) {
@@ -64,6 +66,13 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
                 true
             }
             R.id.action_more -> {
+                val config = InputDialogConfig(
+                    requestKey = "video_keyword",
+                    title = "视频地址",
+                    hint = "输入视频地址",
+                    inputType = InputType.TYPE_CLASS_TEXT
+                )
+                InputDialogFragment.newInstance(config).show(supportFragmentManager, InputDialogFragment.TAG)
                 true
             }
             else -> super.onOptionsItemSelected(item)
