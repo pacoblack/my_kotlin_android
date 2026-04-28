@@ -24,5 +24,6 @@ data class InputDialogConfig(
     val inputType: Int = android.text.InputType.TYPE_TEXT_VARIATION_URI,
     val positiveText: String = "确定",
     val negativeText: String = "取消",
+    val showClipboardSuggestion: Boolean = true,
     val validator: ((String) -> String?)? = null // 返回 null 表示合法
 ) : Parcelable

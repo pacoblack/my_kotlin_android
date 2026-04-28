@@ -69,7 +69,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
                 val config = InputDialogConfig(
                     requestKey = "video_keyword",
                     title = "视频地址",
-                    hint = "输入视频地址",
                     inputType = InputType.TYPE_CLASS_TEXT
                 )
                 InputDialogFragment.newInstance(config).show(supportFragmentManager, InputDialogFragment.TAG)
