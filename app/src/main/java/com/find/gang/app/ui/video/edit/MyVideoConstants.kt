@@ -1,0 +1,28 @@
+package com.find.gang.app.ui.video.edit
+
+import com.find.gang.app.MyApplication.Companion.appContext
+
+object MyVideoConstants {
+    val CACHE_DIR_PATH: String = appContext.cacheDir.canonicalPath
+    val PALETTE_PATH = "$CACHE_DIR_PATH/palette.png"
+    val INPUT_FILE_DIR = "$CACHE_DIR_PATH/input_file_dir/"
+    val ADD_TEXT_RENDER_PNG_PATH = "$CACHE_DIR_PATH/add_text.png"
+    val GET_VIDEO_SINGLE_FRAME_WITH_FFMPEG_TEMP_PATH = "$CACHE_DIR_PATH/get_video_single_frame_with_ffmpeg_temp_path.jpg"
+    val OUTPUT_GIF_TEMP_PATH = "$CACHE_DIR_PATH/output_temp.gif"
+    val OUTPUT_SPLIT_DIR = "$CACHE_DIR_PATH/split_dir/"
+    val OUTPUT_MERGE_DIR = "$CACHE_DIR_PATH/merge_dir/"
+    val VIDEO_TO_GIF_PREVIEW_CACHE_DIR = "$CACHE_DIR_PATH/video_to_gif_preview_cache_dir/"
+    val VIDSTABDETECT_RESULT_PATH = "$CACHE_DIR_PATH/transforms.trf"
+    val VIDEO_TO_GIF_EXTRACTED_FRAMES_PATH = "$CACHE_DIR_PATH/extracted_frames/"
+    val VIDEO_TO_VIDEO_EXTRACTED_FRAMES_PATH = "$CACHE_DIR_PATH/convert_video/"
+    val VIDEO_TO_VIDEO_EXTRACTED_FRAMES_FILE = "$CACHE_DIR_PATH/convert_video/output_temp.mp4"
+    val PICTURE_TO_VIDEO_EXTRACTED_FRAMES_FILE = "$CACHE_DIR_PATH/convert_video/output_pic_temp.mp4"
+    val PICTURE_TO_VIDEO_EXTRACTED_FRAMES_PATH = "$CACHE_DIR_PATH/convert_video/"
+
+    const val FFMPEG_COMMAND_PREFIX_FOR_ALL_AN = "-hwaccel auto -hide_banner -benchmark -an"
+    const val FFMPEG_COMMAND_PREFIX_FOR_ALL = "-hwaccel auto -hide_banner -benchmark"
+
+    const val URI_JOIN_QQ_GROUP =
+        "mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26jump_from%3Dwebapi%26k%3D$5Frn_d8p0OxBX6NwtTAhAhDQh2FTCcI9"
+
+}

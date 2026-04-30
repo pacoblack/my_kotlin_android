@@ -22,7 +22,7 @@ abstract class BaseActivity<VB : ViewBinding>(
             (binding as ViewDataBinding).lifecycleOwner = this
         }
         // 初始化视图
-        initView()
+        initView(savedInstanceState)
         // 观察数据变化
         observeData()
     }
@@ -30,7 +30,7 @@ abstract class BaseActivity<VB : ViewBinding>(
     /**
      * 初始化视图，子类可重写
      */
-    protected open fun initView() {}
+    protected open fun initView(savedInstanceState: Bundle?) {}
 
     /**
      * 观察 LiveData，子类可重写

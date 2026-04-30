@@ -4,10 +4,14 @@
     <item
         android:id="@+id/action_camera"
         android:icon="@android:drawable/ic_menu_camera"
-        android:title="搜索"
+        android:title="相册"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_more"
         android:icon="@android:drawable/ic_menu_help"
-        android:title="其他" />
+        android:title="输入地址" />
+    <item
+        android:id="@+id/action_edit_video"
+        android:icon="@android:drawable/ic_menu_help"
+        android:title="编辑视频" />
 </menu>

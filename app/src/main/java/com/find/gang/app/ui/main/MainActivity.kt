@@ -1,5 +1,6 @@
 package com.find.gang.app.ui.main
 
+import android.os.Build
 import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
@@ -12,6 +13,7 @@ import com.find.gang.app.databinding.ActivityMainBinding
 import com.find.gang.app.ui.dialog.InputDialogConfig
 import com.find.gang.app.ui.dialog.InputDialogFragment
 import com.find.gang.app.ui.gallery.GalleryActivity
+import com.find.gang.app.ui.video.edit.VideoToGifActivity
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.activity_main) {
 
@@ -72,6 +74,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
                     inputType = InputType.TYPE_CLASS_TEXT
                 )
                 InputDialogFragment.newInstance(config).show(supportFragmentManager, InputDialogFragment.TAG)
+                true
+            }
+            R.id.action_edit_video ->{
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    VideoToGifActivity.start(this, "1123aaa123")
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)

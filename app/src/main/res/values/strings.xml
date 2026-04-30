@@ -1,3 +1,49 @@
 <resources>
     <string name="app_name">My Find Application</string>
+    <string name="edit_video">编辑视频</string>
+    <string name="export">导出</string>
+    <string name="go_previous_0_1_seconds">向前0.1秒</string>
+    <string name="go_next_0_1_seconds">向后0.1秒</string>
+    <string name="crop_ratio_">画幅</string>
+    <string name="text">文字</string>
+    <string name="input_text_here">在此输入文字</string>
+    <string name="crop_ratio__">比例</string>
+    <string name="_144p">144P</string>
+    <string name="_240p">240P</string>
+    <string name="_320p">320P</string>
+    <string name="crop_free">自由</string>
+    <string name="crop_square">方形</string>
+    <string name="crop_4_3" translatable="false">4:3</string>
+    <string name="crop_16_9" translatable="false">16:9</string>
+    <string name="playback_speed">速度</string>
+    <string name="speed_warning_slower">ℹ️ 由于性能原因，当前预览画面的播放速度慢于您选择的速度。稍后导出时，将会按照您选择的速度生成 GIF。</string>
+    <string name="resolution">分辨率</string>
+    <string name="custom__">自定义：</string>
+    <string name="clarity">清晰度</string>
+    <string name="low">低</string>
+    <string name="mid">中</string>
+    <string name="high">高</string>
+    <string name="max">最高</string>
+    <string name="remove_background">抠图</string>
+    <string name="reverse">倒放</string>
+    <string name="final_pause">结尾停顿</string>
+    <string name="color_key">抠去颜色</string>
+    <string name="color_quality">色彩品质</string>
+    <string name="selected_color">Selected color</string>
+    <string name="preview__">预览效果</string>
+    <string name="_similarity_">容差</string>
+    <string name="frame_rate">帧率</string>
+    <string name="cycle">循环</string>
+    <string name="some_apps_do_not_support_above_10_fps">⚠️ 部分软件播放帧率大于 10 的 GIF 会掉帧</string>
+    <string name="close">关闭</string>
+    <string name="more_options">更多选项</string>
+    <string name="gif_duration_s">GIF 时长：%s 秒</string>
+    <string name="language_item_separator_normal">、</string>
+    <string name="effect_needs_to_be_viewed_after_exporting">ℹ️ %s的效果需在导出后查看</string>
+    <string name="click_on_the_preview_image_to_pick_an_color">点按预览图即可取色</string>
+    <string name="language_item_separator_last">和</string>
+    <string name="loading_file_d_seconds_please_wait">正在读取文件，大约还需%d秒，请稍等…</string>
+
+    <string name="join_qq_group_toast">QQ 群号已复制到剪贴板</string>
+    <string name="qq_group_id" translatable="false">729757909</string>
 </resources>

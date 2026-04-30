@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -59,6 +61,11 @@ android {
 }
 
 dependencies {
+    implementation(fileTree("libs") {
+        // 包含所有以 'lib-' 开头的 .aar 文件
+        include("ffmpeg-*.aar")
+        include("smart-*.jar")
+    })
     implementation(project(":third"))
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.core.ktx)
@@ -120,4 +127,8 @@ dependencies {
 //    ksp(libs.glide.compiler)
 
     implementation(libs.permissionx)
+
+    implementation(libs.android.image.cropper)
+
+    implementation(libs.androidx.draganddrop)
 }

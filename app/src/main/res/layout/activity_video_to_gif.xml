@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<androidx.appcompat.widget.LinearLayoutCompat
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical"
+    tools:context=".ui.video.edit.VideoToGifActivity">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:animateLayoutChanges="true"
+        android:gravity="center_vertical">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbClose"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            app:icon="@drawable/ic_close"
+            app:iconTint="@color/dark" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:gravity="start"
+                android:text="@string/edit_video"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="@color/dark" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/mtvGifDurationS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:gravity="start"
+                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                android:textColor="@color/grey"
+                tools:text="GIF 时长 123.4 秒" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbSave"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:animateLayoutChanges="true"
+            android:text="@string/export"
+            app:icon="@drawable/ic_save" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:animateLayoutChanges="true"
+        android:background="@color/video_background"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="12dp">
+
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:animateLayoutChanges="true"
+            android:transitionName="ImageVideoFrame" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/acivText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"
+            android:animateLayoutChanges="true"
+            android:scaleType="fitCenter"
+            android:transitionName="ImageText" />
+
+        <com.canhub.cropper.CropImageView
+            android:id="@+id/cropImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:alpha="0.75"
+            android:animateLayoutChanges="true"
+            app:cropAutoZoomEnabled="false"
+            app:cropBorderCornerLength="8dp"
+            app:cropBorderCornerThickness="2dp"
+            app:cropBorderLineThickness="1dp"
+            app:cropGuidelines="onTouch"
+            app:cropGuidelinesThickness="1dp"
+            app:cropShowProgressBar="false"
+            tools:visibility="gone" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp">
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/rangeSlider"
+            style="@style/Theme.CuteGif.Slider"
+            app:labelBehavior="gone" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/sliderCursor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:enabled="false"
+            android:focusable="false"
+            app:labelBehavior="gone"
+            app:thumbColor="@color/green_light"
+            app:trackColorActive="@color/transparent"
+            app:trackColorInactive="@color/transparent" />
+    </FrameLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbTrimTimeMinus"
+            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/grey_one_in_sixteen"
+            android:contentDescription="@string/go_previous_0_1_seconds"
+            app:icon="@drawable/baseline_keyboard_arrow_left_24"
+            app:iconTint="@color/green_dark" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/mbtgMbTrimTime"
+            style="@style/Widget.MaterialComponents.MaterialButtonToggleGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_weight="1"
+            app:checkedButton="@id/mbTrimTimeCurrentPlaying"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mbTrimTimeInPoint"
+                style="@style/Theme.CuteGif.SegmentedButton"
+                android:text="0:00.0"
+                android:typeface="monospace"
+                tools:ignore="HardcodedText" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mbTrimTimeCurrentPlaying"
+                style="@style/Theme.CuteGif.SegmentedButton"
+                android:text="1:23.4"
+                android:textStyle="bold"
+                android:typeface="monospace"
+                tools:ignore="HardcodedText" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mbTrimTimeOutPoint"
+                style="@style/Theme.CuteGif.SegmentedButton"
+                android:text="9:59.9"
+                android:typeface="monospace"
+                tools:ignore="HardcodedText" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbTrimTimePlus"
+            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/grey_one_in_sixteen"
+            android:contentDescription="@string/go_next_0_1_seconds"
+            app:icon="@drawable/baseline_keyboard_arrow_right_24"
+            app:iconTint="@color/green_dark" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="4dp"
+        android:animateLayoutChanges="true"
+        android:gravity="center_vertical"
+        android:minHeight="54dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbPlayPause"
+            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:animateLayoutChanges="true"
+            android:backgroundTint="@color/grey_one_in_sixteen"
+            app:icon="@drawable/ic_baseline_pause_24"
+            app:iconTint="@color/green_dark" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbCropRatio"
+            style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:animateLayoutChanges="true"
+            android:backgroundTint="@color/grey_one_in_sixteen"
+            android:text="@string/crop_ratio_"
+            app:icon="@drawable/ic_baseline_crop_24" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbPlaybackSpeed"
+            style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:backgroundTint="@color/grey_one_in_sixteen"
+            android:text="1X"
+            app:icon="@drawable/ic_baseline_speed_24"
+            tools:ignore="HardcodedText" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbAddText"
+            style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:backgroundTint="@color/grey_one_in_sixteen"
+            android:text="@string/text"
+            app:icon="@drawable/ic_baseline_text_fields_24" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

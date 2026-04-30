@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="transparent">#00000000</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -11,4 +12,22 @@
     <color name="primary_color">#FF03DAC5</color>
     <color name="primary_dark_color">#FF018786</color>
     <color name="accent_color">#FF3700B3</color>
+
+    <color name="green_light">#8ff2af</color>
+    <color name="green_dark">#40a367</color>
+    <color name="green_dark_half">#8040a367</color>
+    <color name="green_dark_quarter">#4040a367</color>
+    <color name="grey">#757874</color>
+    <color name="grey_half">#80757874</color>
+    <color name="grey_quarter">#40757874</color>
+    <color name="grey_one_in_sixteen">#10757874</color>
+    <color name="divider">@color/grey_half</color>
+    <color name="light">#191c19</color>
+    <color name="dark">#f0f1ed</color>
+    <color name="video_background">#202020</color>
+    <color name="launcher_background">#59bf76</color>
+    <color name="launcher_foreground">#f8faf5</color>
+    <color name="full_white">#FFFFFF</color>
+    <color name="indicator_selected">#4CAF50</color>
+    <color name="indicator_normal">#BDBDBD</color>
 </resources>
