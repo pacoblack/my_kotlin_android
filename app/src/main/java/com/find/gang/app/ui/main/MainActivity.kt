@@ -1,5 +1,6 @@
 package com.find.gang.app.ui.main
 
+import android.net.Uri
 import android.os.Build
 import android.text.InputType
 import android.view.Menu
@@ -14,6 +15,7 @@ import com.find.gang.app.ui.dialog.InputDialogConfig
 import com.find.gang.app.ui.dialog.InputDialogFragment
 import com.find.gang.app.ui.gallery.GalleryActivity
 import com.find.gang.app.ui.video.edit.VideoToGifActivity
+import com.find.gang.common.toolbox.PickerManager
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.activity_main) {
 
@@ -22,6 +24,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navHostFragment.navController
     }
+    private val manager = PickerManager()
 
     override fun getViewModelClass(): Class<MainViewModel> = MainViewModel::class.java
 
@@ -30,6 +33,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
 
         setupToolbar()
         binding.bottomNavView.setupWithNavController(navController)
+
+        manager.register(this, object : PickerManager.Callback {
+            override fun onVideoPicked(uri: Uri) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    VideoToGifActivity.start(this@MainActivity, uri.toString())
+                }
+            }
+        })
     }
 
     fun setupToolbar(){
@@ -77,9 +88,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
                 true
             }
             R.id.action_edit_video ->{
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    VideoToGifActivity.start(this, "1123aaa123")
-                }
+                manager.pickSingleVideo()
                 true
             }
             else -> super.onOptionsItemSelected(item)

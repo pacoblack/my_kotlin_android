@@ -43,7 +43,7 @@ class VideoToGifActivity : BaseActivity<ActivityVideoToGifBinding>(R.layout.acti
     private val bottomSheetVideoToGif2PlaybackSpeed by lazy { BottomSheetVideoToGifPlaybackSpeed() }
     private val videoToGifExportOptionsDialogFragment by lazy { VideoToGifExportOptionsDialogFragment() }
     private val bottomSheetVideoToGifCropRatio by lazy { BottomSheetVideoToGifCropRatio() }
-    private val videoDuration by lazy { getVideoDurationByAndroidSystem(inputVideoPath) }
+    private val videoDuration by lazy { getVideoDurationByAndroidSystem(this@VideoToGifActivity, inputVideoPath) }
 
     // 为 VideoToGifExportOptionsDialogFragment 保存色度抠图所选的颜色
     var savedColorKeyColor: Int? = null

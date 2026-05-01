@@ -1,10 +1,12 @@
 package com.find.gang.app.toolbox
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.MediaMetadataRetriever
 import androidx.annotation.IntRange
+import androidx.core.net.toUri
 import com.find.gang.app.MyApplication
 import com.find.gang.app.toolbox.FFmpegKitExtensions.getVideoSingleFrameWithFFmpeg
 import com.find.gang.app.toolbox.Toolbox.logRed
@@ -32,12 +34,12 @@ object MediaTools {
   fun generateTransparentBitmap(w: Int, h: Int) =
     Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888).apply { eraseColor(Color.TRANSPARENT) }
 
-  fun getVideoDurationByAndroidSystem(path: String) = with(MediaMetadataRetriever()) {
+  fun getVideoDurationByAndroidSystem(context: Context, path: String) = with(MediaMetadataRetriever()) {
     try {
-      setDataSource(path)
+      setDataSource(context, path.toUri())
       val duration = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toInt()
       if (duration == 0) null else duration
-    } catch (_: Exception) {
+    } catch (e: Exception) {
       null
     } finally {
       release()

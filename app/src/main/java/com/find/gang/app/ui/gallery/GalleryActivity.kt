@@ -5,7 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
+import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
@@ -14,13 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.find.gang.app.R
 import com.find.gang.app.base.BaseActivity
 import com.find.gang.app.databinding.ActivityGalleryBinding
+import com.find.gang.third.ui.image.MediaItem
+import com.find.gang.third.ui.image.MediaType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import androidx.core.net.toUri
-import androidx.core.content.edit
-import com.find.gang.third.ui.image.MediaItem
-import com.find.gang.third.ui.image.MediaType
 
 class GalleryActivity : BaseActivity<ActivityGalleryBinding, GalleryViewModel>(R.layout.activity_gallery) {
     override fun getViewModelClass(): Class<GalleryViewModel> = GalleryViewModel::class.java
