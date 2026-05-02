@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.find.gang.app.R
 import com.find.gang.app.base.BaseActivity
 import com.find.gang.app.databinding.ActivityMainBinding
+import com.find.gang.app.toolbox.FileTools.copyToInputFileDir
 import com.find.gang.app.ui.dialog.InputDialogConfig
 import com.find.gang.app.ui.dialog.InputDialogFragment
 import com.find.gang.app.ui.gallery.GalleryActivity
@@ -37,7 +38,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
         manager.register(this, object : PickerManager.Callback {
             override fun onVideoPicked(uri: Uri) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    VideoToGifActivity.start(this@MainActivity, uri.toString())
+                    VideoToGifActivity.start(this@MainActivity, uri.copyToInputFileDir())
                 }
             }
         })

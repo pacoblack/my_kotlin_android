@@ -15,18 +15,12 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.get
+import androidx.core.graphics.scale
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
-import kotlin.math.min
-import androidx.core.graphics.scale
 import com.find.gang.app.R
 import com.find.gang.app.databinding.DialogFragmentVideoToGifExportOptionsBinding
 import com.find.gang.app.toolbox.FFmpegKitExtensions.executeFFmpeg
-import com.find.gang.app.ui.video.edit.MyVideoConstants.FFMPEG_COMMAND_PREFIX_FOR_ALL_AN
-import com.find.gang.app.ui.video.edit.MyVideoConstants.VIDEO_TO_GIF_PREVIEW_CACHE_DIR
-import com.find.gang.app.ui.video.edit.task.TaskBuilderVideoToGif
-import com.find.gang.app.ui.video.edit.task.TaskBuilderVideoToGifForPreview
-import com.find.gang.app.widget.TextRender
 import com.find.gang.app.toolbox.FileTools.resetDirectory
 import com.find.gang.app.toolbox.MediaTools.getVideoSingleFrame
 import com.find.gang.app.toolbox.MediaTools.gifsicleLossy
@@ -39,8 +33,14 @@ import com.find.gang.app.toolbox.Toolbox.logRed
 import com.find.gang.app.toolbox.Toolbox.onClick
 import com.find.gang.app.toolbox.Toolbox.toast
 import com.find.gang.app.toolbox.Toolbox.visibleIf
+import com.find.gang.app.ui.video.edit.MyVideoConstants.FFMPEG_COMMAND_PREFIX_FOR_ALL_AN
+import com.find.gang.app.ui.video.edit.MyVideoConstants.VIDEO_TO_GIF_PREVIEW_CACHE_DIR
+import com.find.gang.app.ui.video.edit.task.TaskBuilderVideoToGif
+import com.find.gang.app.ui.video.edit.task.TaskBuilderVideoToGifForPreview
 import com.find.gang.app.ui.video.todo.EditVideoPerformActivity
 import com.find.gang.app.ui.video.todo.VideoToGifPerformerActivity
+import com.find.gang.app.widget.TextRender
+import kotlin.math.min
 
 class VideoToGifExportOptionsDialogFragment : DialogFragment() {
   private var _binding: DialogFragmentVideoToGifExportOptionsBinding? = null
