@@ -22,6 +22,19 @@ object MyVideoConstants {
     const val FFMPEG_COMMAND_PREFIX_FOR_ALL_AN = "-hwaccel auto -hide_banner -benchmark -an"
     const val FFMPEG_COMMAND_PREFIX_FOR_ALL = "-hwaccel auto -hide_banner -benchmark"
 
+    const val EXTRA_TASK_BUILDER_VIDEO_TO_GIF = "EXTRA_TASK_BUILDER_VIDEO_TO_GIF"
+
+    const val EXTRA_SAVED_FILE_URI = "EXTRA_SAVED_FILE_URI"
+
+    const val EXTRA_VIDEO_POSITION = "EXTRA_VIDEO_POSITION"
+
+    const val EXTRA_TEXT_RENDER = "EXTRA_TEXT_RENDER"
+
+    const val EXTRA_VIDEO_TYPE = "EXTRA_VIDEO_TYPE"
+
+    const val MIME_TYPE_IMAGE_GIF = "image/gif"
+    const val MIME_TYPE_VIDEO_MP4 = "video/mp4"
+
     const val URI_JOIN_QQ_GROUP =
         "mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26jump_from%3Dwebapi%26k%3D$5Frn_d8p0OxBX6NwtTAhAhDQh2FTCcI9"
 

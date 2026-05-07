@@ -2,12 +2,17 @@ package com.find.gang.app.toolbox
 
 import androidx.annotation.IntRange
 import com.arthenica.ffmpegkit.FFmpegKit
+import com.arthenica.ffmpegkit.FFmpegKitConfig
+import com.arthenica.ffmpegkit.FFmpegSessionCompleteCallback
 import com.arthenica.ffmpegkit.FFprobeKit
+import com.arthenica.ffmpegkit.LogCallback
 import com.arthenica.ffmpegkit.MediaInformation
+import com.arthenica.ffmpegkit.StatisticsCallback
 import com.find.gang.app.toolbox.MediaTools.getRotationFromProperties
 import com.find.gang.app.toolbox.Toolbox.swapIf
 import com.find.gang.app.toolbox.Toolbox.toEmptyStringIf
 import com.find.gang.app.ui.video.edit.MyVideoConstants
+import java.util.concurrent.ExecutorService
 import kotlin.math.roundToInt
 
 object FFmpegKitExtensions {
@@ -66,4 +71,23 @@ object FFmpegKitExtensions {
         // 这里的 this 就是调用该方法的 String 对象本身
         return FFmpegKit.execute(this)  // 根据你的逻辑构造 A 对象
     }
+
+    fun String.executeAsync( completeCallback: FFmpegSessionCompleteCallback) {
+        FFmpegKit.executeAsync(this, completeCallback)
+    }
+    fun String.executeAsync(completeCallback: FFmpegSessionCompleteCallback, logCallback: LogCallback, statisticsCallback: StatisticsCallback) {
+        FFmpegKit.executeAsync(this, completeCallback, logCallback, statisticsCallback)
+    }
+    fun String.executeAsync( completeCallback: FFmpegSessionCompleteCallback, executorService: ExecutorService) {
+        FFmpegKit.executeAsync(this, completeCallback, executorService)
+    }
+    fun String.executeAsync( completeCallback: FFmpegSessionCompleteCallback, logCallback: LogCallback, statisticsCallback: StatisticsCallback, executorService: ExecutorService) {
+        FFmpegKit.executeAsync(this, completeCallback, logCallback, statisticsCallback, executorService)
+    }
+
+    fun finishFFmpegKitTask(){
+        FFmpegKit.cancel()
+        FFmpegKitConfig.clearSessions()
+    }
+
 }

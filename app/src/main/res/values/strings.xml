@@ -46,4 +46,27 @@
 
     <string name="join_qq_group_toast">QQ 群号已复制到剪贴板</string>
     <string name="qq_group_id" translatable="false">729757909</string>
+    <string name="cancelled">取消</string>
+    <string name="exporting_gif_">正在导出gif</string>
+    <string name="an_error_occurred">出现错误</string>
+    <string name="gif_saved_to_gallery">保存gif到相册</string>
+    <string name="delete">删除</string>
+    <string name="share">分享</string>
+    <string name="done">完成</string>
+    <string name="_ext__saved_to_gallery">"%s 已保存至相册"</string>
+    <string name="file_deleted">删除文件</string>
+    <string name="file_size_s">文件大小：%s</string>
+    <string name="transcoding_video">正在转码视频</string>
+    <string name="unable_to_read_video">无法读取视频文件</string>
+    <string name="transcoding_video__d_">正在转码视频（%d%%）</string>
+    <string name="compressing_gif_raw_size">正在压缩 GIF…（压缩前：%s）</string>
+    <string name="____brackets____">（%s）</string>
+    <string name="edit_text">编辑文字</string>
+    <string name="rotate_d_degrees">旋转%d°</string>
+
+    <string name="bold">粗体</string>
+    <string name="italic">斜体</string>
+    <string name="alignment_direction">对齐方向</string>
+    <string name="rotate">旋转</string>
+    <string name="color">颜色</string>
 </resources>
