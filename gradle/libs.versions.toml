@@ -1,6 +1,7 @@
 [versions]
 agp = "8.2.2"
 androidImageCropper = "4.6.0"
+coil = "2.7.0"
 coreKtx = "1.15.0"  # 降低版本以兼容API 35
 dotsindicator = "4.3"
 draganddrop = "1.0.0"
@@ -43,11 +44,9 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 
 [libraries]
-android-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "androidImageCropper" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-draganddrop = { module = "androidx.draganddrop:draganddrop", version.ref = "draganddrop" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
-dotsindicator = { module = "com.tbuonomo:dotsindicator", version.ref = "dotsindicator" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -114,4 +113,10 @@ glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = 
 
 # 权限
 permissionx = { module = "com.guolindev.permissionx:permissionx", version.ref = "permissionx" }
+
+android-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "androidImageCropper" }
+coil = { module = "io.coil-kt:coil", version.ref = "coil" }
+coil-video = { module = "io.coil-kt:coil-video", version.ref = "coil" }
+coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
+dotsindicator = { module = "com.tbuonomo:dotsindicator", version.ref = "dotsindicator" }
 

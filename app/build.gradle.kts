@@ -131,4 +131,8 @@ dependencies {
     implementation(libs.android.image.cropper)
 
     implementation(libs.androidx.draganddrop)
+
+    implementation(libs.coil)
+    implementation(libs.coil.video)   // 视频帧支持
+    implementation(libs.coil.gif) // gif支持
 }
