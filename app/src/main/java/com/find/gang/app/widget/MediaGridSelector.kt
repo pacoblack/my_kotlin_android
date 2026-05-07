@@ -28,6 +28,9 @@ class MediaGridSelector @JvmOverloads constructor(
     private val adapter: MediaGridAdapter
     private var selectionListener: OnSelectionChangedListener? = null
 
+    private var itemLongClickListener: OnItemLongClickListener? = null
+
+
     // 数据：视频Uri列表（最多9个）
     private var videoUris: List<Uri> = emptyList()
 
@@ -40,9 +43,13 @@ class MediaGridSelector @JvmOverloads constructor(
     init {
         addView(recyclerView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
 
-        adapter = MediaGridAdapter { position ->
-            handleItemClick(position)
-        }
+        adapter = MediaGridAdapter(
+            onItemClick = { position -> handleItemClick(position) },
+            onItemLongClick = { position ->
+                val uri = videoUris.getOrNull(position) ?: return@MediaGridAdapter
+                itemLongClickListener?.onItemLongClick(position, uri)
+            }
+        )
         recyclerView.adapter = adapter
     }
 
@@ -65,6 +72,10 @@ class MediaGridSelector @JvmOverloads constructor(
      */
     fun setOnSelectionChangedListener(listener: OnSelectionChangedListener) {
         this.selectionListener = listener
+    }
+
+    fun setOnItemLongClickListener(listener: OnItemLongClickListener) {
+        this.itemLongClickListener = listener
     }
 
     private fun handleItemClick(position: Int) {
@@ -118,4 +129,13 @@ class MediaGridSelector @JvmOverloads constructor(
          */
         fun onSelectionChanged(selected: List<Pair<Uri, Int>>)
     }
+
+    interface OnItemLongClickListener {
+        /**
+         * @param position 被长按的格子位置
+         * @param uri      对应的视频Uri
+         */
+        fun onItemLongClick(position: Int, uri: Uri)
+    }
+
 }

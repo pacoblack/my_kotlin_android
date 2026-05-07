@@ -11,7 +11,8 @@ import com.find.gang.app.databinding.ItemGridMediaBinding
 import com.find.gang.app.toolbox.Toolbox.logRed
 
 class MediaGridAdapter(
-    private val onItemClick: (Int) -> Unit
+    private val onItemClick: (Int) -> Unit,
+    private val onItemLongClick: (Int) -> Unit
 ) : RecyclerView.Adapter<MediaGridAdapter.ViewHolder>() {
 
     private var items: List<Pair<Uri, Int>> = emptyList()   // Pair<uri, order>，order=-1即未选中
@@ -33,6 +34,11 @@ class MediaGridAdapter(
         holder.bind(uri, order)
         holder.itemView.setOnClickListener {
             onItemClick(position)
+        }
+        // 长按（返回 true 表示消费事件，避免再触发点击）
+        holder.itemView.setOnLongClickListener {
+            onItemLongClick(position)
+            true
         }
     }
 
