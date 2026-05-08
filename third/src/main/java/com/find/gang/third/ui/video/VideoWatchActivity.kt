@@ -2,22 +2,25 @@ package com.find.gang.third.ui.video
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowInsets
+import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.PopupWindow
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.media3.common.Player
+import androidx.media3.common.Tracks
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.cache.Cache
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.media3.ui.PlayerView.ControllerVisibilityListener
@@ -38,7 +41,7 @@ class VideoWatchActivity : AppCompatActivity() {
     private lateinit var playerView: PlayerView
     private lateinit var progressBar: ProgressBar
     private lateinit var player: ExoPlayer
-    private var isFullscreen = true
+    private var isFullscreen = false
 
     private val executor = Executors.newSingleThreadExecutor()
 
@@ -47,14 +50,14 @@ class VideoWatchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
+//        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         playerView = binding.playerView
         progressBar = binding.progressBar
-        playerView.setFullscreenButtonClickListener {toggleFullscreen(!isFullscreen)}
-        toggleFullscreen(false)
+        playerView.setFullscreenButtonClickListener {}
+
         playerView.setControllerVisibilityListener(ControllerVisibilityListener { visibility ->
             if (View.VISIBLE == visibility) {
                 if (!isFullscreen) {
@@ -64,6 +67,14 @@ class VideoWatchActivity : AppCompatActivity() {
                 binding.toolbar.visibility = View.GONE
             }
         })
+        playerView.post{
+            val infoBtn: ImageButton? = binding.playerView.findViewById(R.id.control_info)
+            Toast.makeText(this, "ImageView $infoBtn", Toast.LENGTH_LONG).show()
+            infoBtn?.setOnClickListener {
+                showVideoInfoPopup(it)
+            }
+            showVideoInfoPopup(infoBtn!!)
+        }
 
         if (videoUri == null) {
             Toast.makeText(this, "Uri参数问题", Toast.LENGTH_LONG).show()
@@ -72,46 +83,55 @@ class VideoWatchActivity : AppCompatActivity() {
         }
     }
 
-    private fun toggleFullscreen(value:Boolean) {
-        isFullscreen = value
+    private fun getCurrentVideoInfo(): Map<String, String> {
+        // 方式1：通过 Player.Listener 中的最新数据（推荐保存到变量）
+        // 这里直接展示如何从当前 tracks 中获取
 
-        if (isFullscreen) {
-            enterFullscreen()
-        } else {
-            exitFullscreen()
+        val currentTracks = player.currentTracks
+        return parseTrackGroups(currentTracks)
+    }
+
+    fun parseTrackGroups(trackGroupArray: Tracks): Map<String, String> {
+        val info = mutableMapOf<String, String>()
+        for (trackGroup in trackGroupArray.groups) {
+            // 一个TrackGroup包含一个轨道的多个版本（如不同码率的同一个视频）
+            for (i in 0 until trackGroup.length) {
+                val format = trackGroup.getTrackFormat(i)
+                info["Stream$i"] = format.sampleMimeType.toString()
+                // 判断是否为视频轨
+                if (format.sampleMimeType?.startsWith("video/") == true) {
+                    format.let { it ->
+                        info["分辨率"] = "${it.width} × ${it.height}"
+                        it.bitrate.let { bps -> info["码率"] = "${bps / 1000} kbps" }
+                        it.codecs?.let { info["编码"] = it }
+                        it.frameRate.let { info["帧率"] = "$it fps" }
+                        it.sampleMimeType?.let { info["MIME"] = it }
+                        info["声道数/音频"] = "--"  // 可同样获取音频轨道
+                    }
+                }
+            }
         }
+        return info
     }
-
-    private fun enterFullscreen() {
-        binding.appBar.visibility = View.GONE
-        // 1. 隐藏系统UI
-        hideSystemUI()
-
-        // 2. 锁定横屏
-        requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-    }
-
-    private fun exitFullscreen() {
-        binding.appBar.visibility = View.VISIBLE
-        // 1. 显示系统UI
-        showSystemUI()
-
-        // 2. 解锁屏幕方向
-        requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-    }
-
-    private fun hideSystemUI() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val controller = window.insetsController;
-            controller?.hide(WindowInsets.Type.systemBars())
+    private fun showVideoInfoPopup(anchor: View) {
+        val infoMap = getCurrentVideoInfo()
+        if (infoMap.isEmpty()) {
+            Toast.makeText(this, "暂无视频信息", Toast.LENGTH_SHORT).show()
+            return
         }
-    }
 
-    private fun showSystemUI() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val controller = window.insetsController
-            controller?.show(WindowInsets.Type.systemBars())
-        }
+        val infoText = infoMap.entries.joinToString("\n") { "${it.key}: ${it.value}" }
+
+        val popupView = LayoutInflater.from(this).inflate(R.layout.popup_info, null)
+        popupView.findViewById<TextView>(R.id.tv_info).text = infoText
+
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        )
+        popupWindow.showAsDropDown(anchor, 0, -anchor.height - 20) // 显示在按钮上方
     }
 
     override fun onStart() {

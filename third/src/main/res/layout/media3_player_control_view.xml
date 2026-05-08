@@ -98,21 +98,24 @@
 
     <!-- 全屏按钮 -->
     <ImageButton
-        android:id="@id/exo_fullscreen"
+        android:id="@+id/exo_fullscreen"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:contentDescription="退出全屏"
-        android:src="@drawable/exo_ic_fullscreen_exit"
+        android:background="@drawable/exo_ic_fullscreen_exit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/time_container"
         app:layout_constraintRight_toRightOf="parent" />
     <ImageButton
-        android:id="@id/exo_minimal_fullscreen"
+        android:id="@+id/control_info"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:contentDescription="全屏"
-        android:src="@drawable/exo_styled_controls_fullscreen_enter"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="信息"
+        android:background="@drawable/ic_info_outline"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="4dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/time_container"
         app:layout_constraintRight_toRightOf="parent" />
 
