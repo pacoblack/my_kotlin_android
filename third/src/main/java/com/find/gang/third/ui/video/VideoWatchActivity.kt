@@ -1,5 +1,6 @@
 package com.find.gang.third.ui.video
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.os.Environment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -32,6 +34,7 @@ import com.find.gang.third.ui.video.VideoDataSourceFactory.buildMediaSource
 import com.find.gang.third.ui.video.VideoUriExtensions.isHls
 import java.io.File
 import java.util.concurrent.Executors
+import kotlin.math.abs
 
 @UnstableApi
 class VideoWatchActivity : AppCompatActivity() {
@@ -42,6 +45,10 @@ class VideoWatchActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var player: ExoPlayer
     private var isFullscreen = false
+
+    private var downX = 0f
+    private var downY = 0f
+    private var downTime = 0L
 
     private val executor = Executors.newSingleThreadExecutor()
 
@@ -78,11 +85,37 @@ class VideoWatchActivity : AppCompatActivity() {
             }
             showVideoInfoPopup(infoBtn!!)
         }
+        setupGesture(playerView)
 
         if (videoUri == null) {
             Toast.makeText(this, "Uri参数问题", Toast.LENGTH_LONG).show()
             finish()
             return
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupGesture(view: PlayerView) {
+        view.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    downX = event.x
+                    downY = event.y
+                    downTime = System.currentTimeMillis()
+                    true   // 必须返回 true 以继续接收后续事件
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    val upTime = System.currentTimeMillis()
+                    val duration = upTime - downTime
+                    val moved = abs(event.x - downX) > 20f || abs(event.y -downY) > 20f
+                    if (!moved && duration < 200) {
+                        if (player.isPlaying) player.pause() else player.play()
+                    }
+                    true
+                }
+                else -> false
+            }
         }
     }
 
