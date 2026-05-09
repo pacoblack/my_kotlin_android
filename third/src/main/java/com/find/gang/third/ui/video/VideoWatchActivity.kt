@@ -21,6 +21,7 @@ import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
+import androidx.media3.common.C
 import androidx.media3.common.Player
 import androidx.media3.common.Tracks
 import androidx.media3.common.util.UnstableApi
@@ -110,11 +111,13 @@ class VideoWatchActivity : AppCompatActivity() {
         playerView.showController()            // 显示控制器（透明效果）
         playerView.post{
             val infoBtn: ImageButton? = binding.playerView.findViewById(R.id.control_info)
-            Toast.makeText(this, "ImageView $infoBtn", Toast.LENGTH_LONG).show()
             infoBtn?.setOnClickListener {
-                showVideoInfoPopup(it)
+                if (player.playbackState == Player.STATE_READY) {
+                    showVideoInfoPopup(it, getAllTrackInfo())
+                } else {
+                    Toast.makeText(this, "视频尚未准备好", Toast.LENGTH_SHORT).show()
+                }
             }
-            showVideoInfoPopup(infoBtn!!)
         }
         setupGesture(playerView)
 
@@ -228,45 +231,49 @@ class VideoWatchActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCurrentVideoInfo(): Map<String, String> {
-        // 方式1：通过 Player.Listener 中的最新数据（推荐保存到变量）
-        // 这里直接展示如何从当前 tracks 中获取
+    private fun getAllTrackInfo(): String {
+        val tracks = player.currentTracks
+        val sb = StringBuilder()
 
-        val currentTracks = player.currentTracks
-        return parseTrackGroups(currentTracks)
-    }
+        for (group in tracks.groups) {
+            // group.length 是该轨道的可选项数量（例如不同码率的同一视频）
+            if (group.length == 0) continue
 
-    fun parseTrackGroups(trackGroupArray: Tracks): Map<String, String> {
-        val info = mutableMapOf<String, String>()
-        for (trackGroup in trackGroupArray.groups) {
-            // 一个TrackGroup包含一个轨道的多个版本（如不同码率的同一个视频）
-            for (i in 0 until trackGroup.length) {
-                val format = trackGroup.getTrackFormat(i)
-                info["Stream$i"] = format.sampleMimeType.toString()
-                // 判断是否为视频轨
-                if (format.sampleMimeType?.startsWith("video/") == true) {
-                    format.let { it ->
-                        info["分辨率"] = "${it.width} × ${it.height}"
-                        it.bitrate.let { bps -> info["码率"] = "${bps / 1000} kbps" }
-                        it.codecs?.let { info["编码"] = it }
-                        it.frameRate.let { info["帧率"] = "$it fps" }
-                        it.sampleMimeType?.let { info["MIME"] = it }
-                        info["声道数/音频"] = "--"  // 可同样获取音频轨道
-                    }
+            // 确定轨道类型
+            val typeName = when (group.type) {
+                C.TRACK_TYPE_VIDEO -> "视频"
+                C.TRACK_TYPE_AUDIO -> "音频"
+                C.TRACK_TYPE_TEXT  -> "字幕"
+                else               -> "其他(${group.type})"
+            }
+
+            // 遍历该组内所有格式（通常相同内容不同质量）
+            for (i in 0 until group.length) {
+                val format = group.getTrackFormat(i)
+                sb.appendLine("[$typeName] (${i + 1}/${group.length})")
+                sb.appendLine("  ID: ${format.id}")
+                sb.appendLine("  MIME: ${format.sampleMimeType}")
+                format.codecs?.let { sb.appendLine("  编码: $it") }
+                format.language?.let { sb.appendLine("  语言: $it") }
+                format.bitrate.let { sb.appendLine("  码率: ${it / 1000} kbps") }
+
+                // 视频特有信息
+                if (group.type == C.TRACK_TYPE_VIDEO) {
+                    sb.appendLine("  分辨率: ${format.width}×${format.height}")
+                    format.frameRate.let { sb.appendLine("  帧率: $it fps") }
                 }
+                // 音频特有信息
+                if (group.type == C.TRACK_TYPE_AUDIO) {
+                    format.sampleRate.let { sb.appendLine("  采样率: $it Hz") }
+                    format.channelCount.let { sb.appendLine("  声道数: $it") }
+                }
+                sb.appendLine("---")
             }
         }
-        return info
+
+        return sb.toString().ifEmpty { "暂无轨道信息" }
     }
-    private fun showVideoInfoPopup(anchor: View) {
-        val infoMap = getCurrentVideoInfo()
-        if (infoMap.isEmpty()) {
-            Toast.makeText(this, "暂无视频信息", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val infoText = infoMap.entries.joinToString("\n") { "${it.key}: ${it.value}" }
-
+    private fun showVideoInfoPopup(anchor: View, infoText: String) {
         val popupView = LayoutInflater.from(this).inflate(R.layout.popup_info, null)
         popupView.findViewById<TextView>(R.id.tv_info).text = infoText
 
