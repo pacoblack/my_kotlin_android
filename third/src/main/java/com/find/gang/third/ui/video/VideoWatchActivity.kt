@@ -67,6 +67,9 @@ class VideoWatchActivity : AppCompatActivity() {
                 binding.toolbar.visibility = View.GONE
             }
         })
+        playerView.setUseController(true)     // 仍需控制器处理进度条
+        playerView.controllerAutoShow = false // 禁止自动显示/隐藏，始终可见
+        playerView.showController()            // 显示控制器（透明效果）
         playerView.post{
             val infoBtn: ImageButton? = binding.playerView.findViewById(R.id.control_info)
             Toast.makeText(this, "ImageView $infoBtn", Toast.LENGTH_LONG).show()

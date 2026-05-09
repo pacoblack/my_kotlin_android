@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CC000000"
+    android:background="@color/transparent"
     android:padding="12dp">
 
     <!-- 顶部进度条和时间显示 -->
@@ -65,6 +65,7 @@
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -111,12 +112,13 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:contentDescription="信息"
-        android:background="@drawable/ic_info_outline"
+        android:src="@drawable/ic_info_outline"
+        android:background="@color/transparent"
         android:clickable="true"
         android:focusable="true"
         android:elevation="4dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/time_container"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:layout_marginBottom="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
