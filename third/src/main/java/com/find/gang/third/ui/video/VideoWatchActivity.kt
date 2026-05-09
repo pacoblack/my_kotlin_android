@@ -35,6 +35,8 @@ import com.find.gang.third.ui.video.VideoUriExtensions.isHls
 import java.io.File
 import java.util.concurrent.Executors
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 @UnstableApi
 class VideoWatchActivity : AppCompatActivity() {
@@ -49,6 +51,34 @@ class VideoWatchActivity : AppCompatActivity() {
     private var downX = 0f
     private var downY = 0f
     private var downTime = 0L
+    private val seekIntervalMs = 200L
+    private val seekAmountMs = 500L // 前进/后退 每次的间隔
+    private val longPressThreshold = 400L
+    private var isLongPressActive = false
+    private var isDown = false
+    private var hasMovedInDown = false
+
+    private val longPressRunnable = object: Runnable {
+        override fun run() {
+            if (isLongPressActive) {
+                val currentPos = player.currentPosition
+                val duration = if (player.duration > 0) player.duration else 0L
+                if (duration <= 0) return
+
+                val targetPos = if (downX < playerView.width / 2) {
+                    // 左侧：快退
+                    max(0, currentPos - seekAmountMs)
+                } else {
+                    // 右侧：快进
+                    min(duration, currentPos + seekAmountMs)
+                }
+
+                player.seekTo(targetPos)
+                updateSeekHint(targetPos, duration, downX < playerView.width / 2)  // 更新提示
+                playerView.postDelayed(this, seekIntervalMs)
+            }
+        }
+    }
 
     private val executor = Executors.newSingleThreadExecutor()
 
@@ -94,6 +124,26 @@ class VideoWatchActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateSeekHint(targetMs: Long, durationMs: Long, isRewind: Boolean) {
+        val targetTime = formatTime(targetMs)
+        val totalTime = formatTime(durationMs)
+        // 格式：快进 → "目标时间 / 总时长"，快退同理；也可加方向符号
+        val hint = if (isRewind) "◀ $targetTime / $totalTime" else "$targetTime / $totalTime ▶"
+        binding.seekHint.text = hint
+        binding.seekHint.visibility = View.VISIBLE
+    }
+
+    private fun hideSeekHint() {
+        binding.seekHint.visibility = View.GONE
+    }
+
+    private fun formatTime(ms: Long): String {
+        val seconds = (ms / 1000).toInt()
+        val s = seconds % 60
+        val m = (seconds / 60) % 60
+        return String.format("%02d:%02d", m, s)
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun setupGesture(view: PlayerView) {
         view.setOnTouchListener { v, event ->
@@ -102,19 +152,77 @@ class VideoWatchActivity : AppCompatActivity() {
                     downX = event.x
                     downY = event.y
                     downTime = System.currentTimeMillis()
-                    true   // 必须返回 true 以继续接收后续事件
+                    isDown = true
+                    isLongPressActive = false
+                    hasMovedInDown = false
+                    v.removeCallbacks(longPressRunnable)
+
+                    v.postDelayed({
+                        if (isDown) {
+                            isLongPressActive = true
+                            longPressRunnable.run()
+                        }
+                    }, longPressThreshold)
+                    true
                 }
 
-                MotionEvent.ACTION_UP -> {
-                    val upTime = System.currentTimeMillis()
-                    val duration = upTime - downTime
-                    val moved = abs(event.x - downX) > 20f || abs(event.y -downY) > 20f
-                    if (!moved && duration < 200) {
-                        if (player.isPlaying) player.pause() else player.play()
+                MotionEvent.ACTION_MOVE -> {
+                    if (isDown && (abs(event.x - downX) > 20f || abs(event.y - downY) > 20f)) {
+                        hasMovedInDown = true
+                        isDown = false          // 取消长按判定
+                        v.removeCallbacks(longPressRunnable)
+                        isLongPressActive = false
                     }
                     true
                 }
+
+                MotionEvent.ACTION_UP -> {
+                    isDown = false
+                    v.removeCallbacks(longPressRunnable)
+
+                    if (!hasMovedInDown) {
+                        val duration = System.currentTimeMillis() - downTime
+                        val still = abs(event.x - downX) <= 20f && abs(event.y - downY) <= 20f
+
+                        if (!isLongPressActive && still && duration < 200) {
+                            handleShortClick(view)
+                        }
+                    }
+
+                    isLongPressActive = false
+                    hasMovedInDown = false
+                    hideSeekHint()
+                    true
+                }
+
+                MotionEvent.ACTION_CANCEL -> {
+                    isDown = false
+                    v.removeCallbacks(longPressRunnable)
+                    isLongPressActive = false
+                    hasMovedInDown = false
+                    hideSeekHint()
+                    true
+                }
                 else -> false
+            }
+        }
+    }
+
+    private fun handleShortClick(view: PlayerView) {
+        when {
+            // 视频已播放完毕 ➔ 只切换控制栏可见性，不改变播放状态
+            player.playbackState == Player.STATE_ENDED -> {
+                if (view.isControllerFullyVisible) view.hideController() else view.showController()
+            }
+            // 正在播放 ➔ 暂停并显示控制栏
+            player.isPlaying -> {
+                player.pause()
+                view.showController()
+            }
+            // 暂停（未结束）➔ 开始播放并隐藏控制栏
+            else -> {
+                player.play()
+                view.hideController()
             }
         }
     }
