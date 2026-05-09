@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -275,7 +276,24 @@ class VideoWatchActivity : AppCompatActivity() {
             ViewGroup.LayoutParams.WRAP_CONTENT,
             true
         )
-        popupWindow.showAsDropDown(anchor, 0, -anchor.height - 20) // 显示在按钮上方
+
+        // 1. 先测量弹窗尺寸
+        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+        val popupWidth = popupView.measuredWidth
+        val popupHeight = popupView.measuredHeight
+
+        // 2. 获取按钮在屏幕上的绝对坐标
+        val anchorLocation = IntArray(2)
+        anchor.getLocationOnScreen(anchorLocation)
+        val anchorRight = anchorLocation[0] + anchor.width   // 按钮右边缘 X
+        val anchorTop = anchorLocation[1]                    // 按钮上边缘 Y
+
+        // 3. 计算弹窗的左下角位置
+        val popupX = anchorRight         // 弹窗左边缘 = 按钮右边缘
+        val popupY = anchorTop - popupHeight   // 弹窗底边缘 = 按钮上边缘
+
+        // 4. 显示弹窗（可添加小间距，如 -10 向上偏移 10px）
+        popupWindow.showAtLocation(window.decorView, Gravity.NO_GRAVITY, popupX, popupY)
     }
 
     override fun onStart() {
