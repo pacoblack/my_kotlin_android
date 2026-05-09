@@ -3,6 +3,7 @@ package com.find.gang.third.ui.video
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.os.Bundle
 import android.os.Environment
 import android.view.Gravity
@@ -23,7 +24,6 @@ import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.media3.common.C
 import androidx.media3.common.Player
-import androidx.media3.common.Tracks
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
@@ -44,6 +44,7 @@ import kotlin.math.min
 class VideoWatchActivity : AppCompatActivity() {
     private val binding by lazy { ActivityVideoPreviewBinding.inflate(layoutInflater) }
     private val videoUri by lazy { intent.extras?.getString(EXTRA_VIDEO_URI)?.toUri() }
+    private val audioManager by lazy{getSystemService(AUDIO_SERVICE) as AudioManager}
 
     private lateinit var playerView: PlayerView
     private lateinit var progressBar: ProgressBar
@@ -110,6 +111,14 @@ class VideoWatchActivity : AppCompatActivity() {
         playerView.controllerAutoShow = false // 禁止自动显示/隐藏，始终可见
         playerView.showController()            // 显示控制器（透明效果）
         playerView.post{
+            val volumeBtn: ImageButton = binding.playerView.findViewById(R.id.exo_mute)
+            val isMuted = audioManager.isStreamMute(AudioManager.STREAM_MUSIC)
+            updateMuteIcon(volumeBtn, isMuted)
+            volumeBtn.setOnClickListener {
+                toggleMute()
+                val muted = audioManager.isStreamMute(AudioManager.STREAM_MUSIC)
+                updateMuteIcon(volumeBtn, muted)
+            }
             val infoBtn: ImageButton? = binding.playerView.findViewById(R.id.control_info)
             infoBtn?.setOnClickListener {
                 if (player.playbackState == Player.STATE_READY) {
@@ -125,6 +134,22 @@ class VideoWatchActivity : AppCompatActivity() {
             Toast.makeText(this, "Uri参数问题", Toast.LENGTH_LONG).show()
             finish()
             return
+        }
+    }
+
+    fun toggleMute() {
+        audioManager.adjustStreamVolume(
+            AudioManager.STREAM_MUSIC,
+            AudioManager.ADJUST_TOGGLE_MUTE,
+            AudioManager.FLAG_SHOW_UI   // 显示系统UI，给用户反馈
+        )
+    }
+
+    private fun updateMuteIcon(view: ImageButton, isMuted: Boolean) {
+        if (isMuted) {
+            view.setImageResource(R.drawable.ic_volume_off)
+        } else {
+            view.setImageResource(R.drawable.ic_volume_on)
         }
     }
 

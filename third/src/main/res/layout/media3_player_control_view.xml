@@ -6,7 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/transparent"
-    android:padding="12dp">
+    android:paddingStart="12dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    android:paddingEnd="0dp">
 
     <!-- 顶部进度条和时间显示 -->
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -102,10 +105,10 @@
         android:id="@+id/exo_fullscreen"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
         android:contentDescription="退出全屏"
         android:background="@drawable/exo_ic_fullscreen_exit"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/time_container"
         app:layout_constraintRight_toRightOf="parent" />
     <ImageButton
         android:id="@+id/control_info"
@@ -120,5 +123,15 @@
         android:layout_marginBottom="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
-
+    <ImageButton
+        android:id="@+id/exo_mute"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_volume_off"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="静音"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:tint="#FFFFFF" />
 </androidx.constraintlayout.widget.ConstraintLayout>
